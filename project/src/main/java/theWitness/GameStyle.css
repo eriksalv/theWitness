@@ -1,0 +1,34 @@
+.root {
+	-fx-base: rgb(132, 145, 47);
+}
+.button {
+    -fx-font: bold italic 20pt "Arial";
+    -fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+    -fx-transition:1s;
+}
+.tile {
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+	-fx-border-color: black;
+	-fx-border-width: 1;
+	-fx-border-style: solid;
+}
+.normal {
+	/*-fx-border-radius:10px;*/
+	-fx-background-color:white;
+	-fx-overflow:hidden;
+}
+.start {
+	-fx-background-color:white;
+	-fx-border-radius:50%;
+	-fx-border-style:solid;
+	-fx-background-clip:padding-box;
+}
+.movedLine {
+	/*-fx-background-color:#1F51FF;*/
+}
+ .black {
+	-fx-border-color:#70a9e1;
+}
+.white {
+	-fx-border-color:#70a9e1;
+}
