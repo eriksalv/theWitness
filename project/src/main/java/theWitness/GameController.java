@@ -1,57 +1,79 @@
 package theWitness;
 
+import java.io.IOException;
+import java.util.Iterator;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class GameController {
 	
+	@FXML private SaveGameController saveGameController;
+	
 	private Game game;
+	private GameCollection games;
+	private int gameIndex = 1;
 	
 	@FXML
 	Pane board;
 	
+	@FXML Text winText = new Text();
+	
 	@FXML
 	private void initialize() {
-		game = new Game(5,5);
+		Game game1 = new Game(6,6);
+		games = new GameCollection("games",new Game(5,5), new Game(10,10));
+		games.addGame(game1);
+		setInitialGameState();		 
+		createBoard();
+		drawBoard();
+	}
+	
+	private void setInitialGameState() {
+		System.out.println(games.getIsGamesWon());
+		game = games.getGames().getOrDefault(gameIndex, null);
+		game.clear();
 		 
-		 game.getTile(1, 1).setWhite();
-		 game.getTile(3, 1).setWhite();
-		 game.getTile(1, 3).setWhite();
-		 game.getTile(3, 3).setBlack();
-		 //game.getTile(5,5).setBlack();
-		 game.getTile(0, game.getHeight()-1).setStart();
-		 game.getTile(game.getWidth()-1, 0).setGoal();
-		 
-		 createBoard();
-		 drawBoard();
+		game.getTile(1, 1).setWhite();
+		game.getTile(3, 1).setWhite();
+		game.getTile(1, 3).setWhite();
+		game.getTile(3, 3).setBlack();
+		//game.getTile(5,5).setBlack();
+		game.getTile(0, game.getHeight()-1).setStart();
+		game.getTile(game.getWidth()-1, 0).setGoal();
 	}
 	
 	private void createBoard() {
 		board.getChildren().clear();
 		double tileHeight = board.getPrefHeight()/game.getHeight();
 		double tileWidth= board.getPrefWidth()/game.getWidth();
-		for (int y=0;y<game.getHeight();y++) {
-			for (int x=0;x<game.getWidth();x++) {
-				//tileHeight=getTileSize(y,x)[0];
-				//tileWidth=getTileSize(y,x)[1];
-				Pane tile = new Pane();
-				tile.setPrefHeight(tileHeight-2);
-				tile.setPrefWidth(tileWidth-2);
-				tile.setTranslateX((40+x*tileWidth));
-				tile.setTranslateY((15+y*tileHeight));
-				/*tile.setStyle("-fx-border-color: black;\n"
-		                + "-fx-border-width: 1;\n"
-		                + "-fx-border-style: solid;\n"
-		                + "-fx-border-radius:10px;\n"
-		                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);\n"
-		                + "-fx-background-color:green;");*/
-				tile.getStyleClass().add("tile");
-				board.getChildren().add(tile);
-			}
-		}
+		game.getStreamFromIterator().forEach(gameTile -> {
+			//tileHeight=getTileSize(y,x)[0];
+			//tileWidth=getTileSize(y,x)[1];
+			Pane tile = new Pane();
+			tile.setPrefHeight(tileHeight);
+			tile.setPrefWidth(tileWidth);
+			tile.setTranslateX((40+gameTile.getX()*tileWidth));
+			tile.setTranslateY((10+gameTile.getY()*tileHeight));
+			/*tile.setStyle("-fx-border-color: black;\n"
+	                + "-fx-border-width: 1;\n"
+	                + "-fx-border-style: solid;\n"
+	                + "-fx-border-radius:10px;\n"
+	                + "-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);\n"
+	                + "-fx-background-color:green;");*/
+			tile.getStyleClass().add("tile");
+			board.getChildren().add(tile);
+		});
 	}
 	private void drawBoard() {
 		for (int y = 0; y < game.getHeight(); y++) {
@@ -64,22 +86,18 @@ public class GameController {
 			}
 		}
 		
-		/*// Oppgave 10
-		if(game.isGameWon()) {
+		if (game.getIsGameWon()) {
 			winText.setText("Du vant!");
-			winText.setStyle("-fx-font-size: 40px");
+			winText.setStyle("-fx-font-size: 100px");
 			winText.setFill(Color.GREEN);
+			//winText.setStyle("-fx-background-color:blue");
 			winText.setTranslateX(160.0);
 			winText.setTranslateY(200.0);
 			board.getChildren().add(winText);
-		} else if(game.isGameOver()) {
-			loseText.setText("Game Over");
-			loseText.setStyle("-fx-font-size: 40px");
-			loseText.setFill(Color.RED);
-			loseText.setTranslateX(160.0);
-			loseText.setTranslateY(200.0);
-			board.getChildren().add(loseText);
-		}*/
+		}
+		if (game.isGameOver()) {
+			handleReset(); //resetter automatisk når linjen ikke er korrekt
+		}
 	}
 	@FXML
 	public void keyListener(KeyEvent e) {
@@ -94,6 +112,33 @@ public class GameController {
 		}
 		if (e.getCode() == KeyCode.RIGHT) {
 			handleRight();
+		}
+		if (e.getCode() == KeyCode.R) {
+			handleReset();
+		}
+		if (e.getCode() == KeyCode.N) {
+			handleNextGame();
+		}
+		if (e.getCode() == KeyCode.DELETE) {
+			handlePrevGame();
+		}
+	}
+	@FXML
+	public void handleNextGame() {
+		if (games.hasNextLevel(gameIndex)) { //Hvis isGameWon er true for gamet man er på
+			gameIndex++;
+			setInitialGameState();
+			createBoard();
+			drawBoard();
+		}
+	}
+	@FXML
+	public void handlePrevGame() {
+		if (games.hasPrevLevel(gameIndex)) {
+			gameIndex--;
+			setInitialGameState();
+			createBoard();
+			drawBoard();
 		}
 	}
 	@FXML
@@ -115,6 +160,32 @@ public class GameController {
 	public void handleRight() {
 		game.moveRight();
 		drawBoard();
+	}
+	@FXML
+	public void handleReset() {
+		if (board.getChildren().contains(winText)) {
+			board.getChildren().remove(winText);
+		}
+		setInitialGameState();
+		drawBoard();
+	}
+	@FXML
+	public void openSaveView(ActionEvent e) throws IOException { //åpner nytt vindu for lagring
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("SaveGame.fxml"));
+        Parent tableViewParent = loader.load();
+        
+        Scene tableViewScene = new Scene(tableViewParent);
+        
+        //access the controller and call a method
+        SaveGameController controller = loader.getController();
+        controller.initData(games);
+        
+        //This line gets the Stage information
+        Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
+        
+        window.setScene(tableViewScene);
+        window.show();
 	}
 	private String[] getTileColor(Tile tile) {
     	if (tile.isWhite()) { 

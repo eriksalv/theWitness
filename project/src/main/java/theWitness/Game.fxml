@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="480.0" stylesheets="@GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.GameController">
+<AnchorPane fx:id="game" prefHeight="600.0" prefWidth="480.0" stylesheets="@GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.GameController">
    <children>
       <GridPane prefHeight="600.0" prefWidth="480.0">
         <columnConstraints>
@@ -19,27 +19,41 @@
           <RowConstraints maxHeight="295.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-display: flex;" GridPane.rowIndex="1">
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #70a9e1;" GridPane.rowIndex="1">
                <children>
-               	 <Button layoutX="186.0" layoutY="17.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleUp" onKeyPressed="#keyListener" prefHeight="28.0" prefWidth="108.0" text="Up">
+               	 <Button layoutX="208.0" layoutY="14.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleUp" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠑">
                      <font>
                         <Font name="Arial" size="10.0" />
-                     </font></Button>
-                 <Button layoutX="186.0" layoutY="93.0" mnemonicParsing="false" onAction="#handleDown" onKeyPressed="#keyListener" prefHeight="27.0" prefWidth="108.0" text="Down">
+                     </font>
+                 </Button>
+                 <Button layoutX="208.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleDown" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠓">
                      <font>
                         <Font size="10.0" />
-                     </font></Button>
-                 <Button layoutX="57.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleLeft" onKeyPressed="#keyListener" prefHeight="25.0" prefWidth="108.0" text="Left">
+                     </font>
+                 </Button>
+                 <Button layoutX="144.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleLeft" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠐">
                      <font>
                         <Font size="10.0" />
-                     </font></Button>
-                 <Button layoutX="321.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleRight" onKeyPressed="#keyListener" prefHeight="25.0" prefWidth="108.0" text="Right">
+                     </font>
+                 </Button>
+                 <Button layoutX="272.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleRight" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠒">
                      <font>
                         <Font size="10.0" />
-                     </font></Button>
+                     </font>
+               	 </Button>
+               	 <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleReset" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Restart">
+               	 	<font>
+               	 		<Font size="10.0" />         
+               	 	</font>
+               	 </Button>
+                  <Button layoutX="393.0" layoutY="14.0" mnemonicParsing="false" onAction="#openSaveView" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Save">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
-            <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color:#70a9e1; -fx-overflow:hidden;" />
+            <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #70a9e1; -fx-overflow: hidden; -fx-border-radius: 100;" />
          </children>
       </GridPane>
    </children>

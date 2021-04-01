@@ -1,137 +1,161 @@
 package theWitness;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 //import java.util.Arrays;
 
-public class Game {		
-	
-	private int[] gridSize = new int[2];
-	private Tile[][] grid;
-	
+public class Game extends Grid {
+	private int level;
 	protected static int[] start = {0,0};
 	
-    private ArrayList<Tile> movedLine = new ArrayList<Tile>();
-    private ArrayList<String> moveOrder = new ArrayList<String>();
-    private boolean isGameWon = false;
-    private boolean isCorrectPath = false;
-    private boolean firstMove = true;
+	private GameCollection gameCollection;
+	
+//    private ArrayList<Tile> movedLine = new ArrayList<Tile>();
+//    private ArrayList<String> moveOrder = new ArrayList<String>();
+    private Map<Tile,String> moves = new LinkedHashMap<Tile,String>(); //map som har Tile som key, og trekket som førte til Tile som value.
+    private boolean isGameWon;
+    private boolean isCorrectPath;
+    private boolean firstMove;
+    private boolean isGameOver;
 	
 	public Game(int width, int height) {
-		this.gridSize[0] = height;
-		this.gridSize[1] = width;
-		
-		this.grid = new Tile[height][width];
-		
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				grid[y][x] = new Tile(x, y);
-				grid[y][x].setLine();
-			}
-		}
-		
+		super(width,height);
+		isGameWon=false;
+		isCorrectPath=false;
+		firstMove=true;
+		isGameOver=false;
 	}
 	
-	public boolean isTile(int x, int y) {
-		return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
+	public Game(Game game) {
+		this(game.getWidth(),game.getHeight());
 	}
 	
-	public Tile getTile(int x, int y) {
-		if (!isTile(x, y)) {
-			throw new IllegalArgumentException("Coordinates out of bounds");
-		}
-		return this.grid[y][x];
+	public int getLevel() {
+		return level;
 	}
 	
-	public int[] getGridSize() {
-		return gridSize;
+	public void setLevel(int level) {
+		this.level=level;
 	}
 
-	public int getHeight() {
-		return gridSize[0];
-	}
-
-
-	public int getWidth() {
-		return gridSize[1];
+//	public ArrayList<Tile> getMovedLine() {
+//		return movedLine;
+//	}
+	
+	public Map<Tile,String> getMoves() {
+		return moves;
 	}
 	
-	public ArrayList<Tile> getMovedLine() {
-		return movedLine;
+	public boolean getIsGameWon() {
+		return isGameWon;
 	}
 	
-	public void drawLine(int dx, int dy) {
-		if (firstMove) { //optimalisering
-			for (int y = 0; y < getHeight(); y++) {
-				for (int x = 0; x < getWidth(); x++) {
-					if (getTile(x,y).getType()=='S') {
-						grid[y][x].setMovedLine();
-						movedLine.add(grid[y][x]);
-					}
-				}
-			}
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+	
+	public void addGameCollection(GameCollection gameCollection) {
+		this.gameCollection = gameCollection;
+	}
+	
+	public void removeGameCollection(GameCollection gameCollection) {
+		gameCollection=null;
+	}
+	
+	public GameCollection getGameCollection() {
+		return gameCollection;
+	}
+	
+	public void clear() {
+		getGrid().forEach(list -> list.forEach(tile -> tile.setLine()));
+		isGameWon=false;
+		isCorrectPath=false;
+		firstMove=true;
+		isGameOver=false;
+		moves.clear();
+		
+	}
+		
+	private void drawLine(int dx, int dy, String move) {		
+		//hvis spillet ikke har startet enda, må start-ruten endre seg
+		if (firstMove) { 
+			getStreamFromIterator().filter(tile -> tile.isStart()).forEach(tile -> {
+				tile.setMovedLine();
+				moves.put(tile, move);
+			});
 			firstMove=false;
 		}
 		
-		int targetX = movedLine.get(movedLine.size()-1).getX() + dx;
-		int targetY = movedLine.get(movedLine.size()-1).getY() + dy;
+//		int targetX = movedLine.get(movedLine.size()-1).getX() + dx;
+//		int targetY = movedLine.get(movedLine.size()-1).getY() + dy;
+		//Lager en arraylist av settet av keys i moves for å hente ut den siste Tile som ble lagt til
+		List<Tile> movesList = new ArrayList<Tile>(moves.keySet());
+		int targetX = movesList.get(moves.size()-1).getX() + dx;
+		int targetY = movesList.get(moves.size()-1).getY() + dy;
 		Tile targetTile = getTile(targetX,targetY);
 		
-		validateMove(targetX, targetY, targetTile, true);
+		//validerer trekket før det gjøres (store) endringer i tilstanden
+		validateMove(targetX, targetY, targetTile, true); 
 		
-		if (targetTile.isGoal()) {
-			if (checkCorrectPath()) {
-				isGameWon=true;
+		if (movesList.size()>=2 && targetTile==movesList.get(movesList.size()-2)) { //Hvis man går tilbake
+			if (movesList.size()>=3) {
+				movesList.get(movesList.size()-3).setLastMovedLine();
 			}
-		}
-		
-		if (movedLine.size()>=2 && targetTile==movedLine.get(movedLine.size()-2)) { //Hvis man går tilbake
-			if (movedLine.size()>=3) {
-				movedLine.get(movedLine.size()-3).setLastMovedLine();
-			}
-			grid[targetY-dy][targetX-dx].setLine();
+			//grid[targetY-dy][targetX-dx].setLine();
+			getTile(targetX-dx, targetY-dy).setLine(); //setter tilbake til vanlig rute
 			targetTile.setMovedLine();
-			movedLine.remove(movedLine.size()-1); //Fjerner siste element
+			moves.remove(movesList.get(movesList.size()-1)); //Fjerner siste element fra moves
 		}
 		else {
+			moves.put(targetTile, move);
+			movesList.add(targetTile);
+			if (targetTile.isGoal()) {
+				if (checkCorrectPath()) {
+					isGameWon=true;
+					gameCollection.gameStateChanged(this, isGameWon);
+				} else {
+					isGameOver=true;
+				}
+			}
 			targetTile.setMovedLine();
-			grid[targetY-dy][targetX-dx].setLastMovedLine();
-			movedLine.add(targetTile);
-			if (movedLine.size()>=3) {
-				movedLine.get(movedLine.size()-3).setMovedLine(); //ruten to steg bak den siste skal bli "vanlig" igjen slik at den får kollisjon
+			//grid[targetY-dy][targetX-dx].setLastMovedLine();
+			getTile(targetX-dx, targetY-dy).setLastMovedLine();
+			if (movesList.size()>=3) {
+				movesList.get(movesList.size()-3).setMovedLine(); //ruten to steg bak den siste skal bli "vanlig" igjen slik at den får kollisjon
 			}
 		}
 		if (isGameWon) {
-			for (int i=0;i<movedLine.size();i++) {
-				movedLine.get(i).setMovedLine();
-			}
+			movesList.forEach(tile -> tile.setMovedLine());
+			System.out.println(moves.values());
 		}
 	}
 
     public void moveUp() {
-    	moveOrder.add("Up"); //Må kanskje fikses senere
-        drawLine(0, -1);
+        drawLine(0, -1, "Up");
 	    System.out.println(this);
     }
 
     public void moveDown() {
-    	moveOrder.add("Down");
-        drawLine(0, 1);
+        drawLine(0, 1,"Down");
 	    System.out.println(this);
     }
 
     public void moveLeft() {
-    	moveOrder.add("Left");
-        drawLine(-1, 0);
+        drawLine(-1, 0,"Left");
 	    System.out.println(this);
     }
 
     public void moveRight() {
-    	moveOrder.add("Right");
-        drawLine(1, 0);
+        drawLine(1, 0,"Right");
 	    System.out.println(this);
     }
 	
@@ -153,11 +177,19 @@ public class Game {
 	}*/
     
     private boolean checkCorrectPath() {                                       //WTF?????
+    	List<Tile> movedLine = new ArrayList<Tile>(moves.keySet());
+    	List<String> moveOrder = new ArrayList<String>(moves.values());
+    	System.out.println(movedLine);
+    	System.out.println(moveOrder);
+    	
     	List<Set<Tile>> partitions = new ArrayList<Set<Tile>>();    	
     	partitions.add(new HashSet<Tile>());
     	partitions.add(new HashSet<Tile>());
     	
-    	for (int i=0;i<movedLine.size();i++) {
+    	HashSet<Character> sector1 = new HashSet<Character>();
+    	HashSet<Character> sector2 = new HashSet<Character>();
+    	
+    	for (int i=1;i<movedLine.size();i++) {
     		AtomicInteger nextX1 = new AtomicInteger(0); //AtomicInteger hjelper med objektreferanser
         	AtomicInteger nextY1 = new AtomicInteger(0);
         	AtomicInteger nextX2 = new AtomicInteger(0);
@@ -179,14 +211,14 @@ public class Game {
     			nextY2=counterObject;
     		}
     		if (moveOrder.get(i).equals("Left")) {
-    			//nextX1=counterObject;    				
-    			//nextX2=counterObject;
+    			nextX1=counterObject;    				
+    			nextX2=counterObject;
     			nextY1.set(-1);
     			nextY2.set(1);
     		}
     		if (moveOrder.get(i).equals("Right")) { //Funker bare rett ved siden av
-    			//nextX1=counterObject;    				
-    			//nextX2=counterObject;
+    			nextX1=counterObject;    				
+    			nextX2=counterObject;
     			nextY1.set(1);
     			nextY2.set(-1);
     		}
@@ -195,6 +227,7 @@ public class Game {
     		while (isTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()) && !getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isMovedLine()) { 
     			if (getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isWhite() || getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isBlack()) {
     				partitions.get(0).add(getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()));
+    				sector1.add(getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).getType());
     			}
     			//counter++;
     			counterObject.getAndIncrement();
@@ -202,14 +235,15 @@ public class Game {
     		while (isTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()) && !getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isMovedLine()) {
     			if (getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isWhite() || getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isBlack()) {
     				partitions.get(1).add(getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()));
+    				sector2.add(getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).getType());
     			}
     			//counter++;
     			counterObject.getAndIncrement();
     		}
     	}
-    	System.out.println(partitions.get(0));
-    	System.out.println(partitions.get(1));
-    	if (partitions.get(0).size()>=2 || partitions.get(1).size()>=2) {
+    	System.out.println(sector1);
+    	System.out.println(sector2);
+    	if (sector1.size()>1 || sector2.size()>1) { //hvis det er mer enn 1 element i hvert sektor-set betyr det at det er en hvit og en svart i en sektor
     		return false;
     	}
     	return true;
@@ -236,14 +270,7 @@ public class Game {
     
     @Override
     public String toString() {
-    	String boardString = "";
-		for (int y = 0; y < getHeight(); y++) {
-			for (int x = 0; x < getWidth(); x++) {
-				boardString += getTile(x, y);
-			}
-			boardString += "\n";
-		}
-		// Oppgave 5b
+    	String boardString = super.toString();
 		if (isGameWon) {
 			boardString += "\n\nGame won!";
 		}
@@ -258,33 +285,11 @@ public class Game {
 		 game.getTile(0, game.getHeight()-1).setStart();
 		 game.getTile(game.getWidth()-1, 0).setGoal();
 		 System.out.println(game);
+		 System.out.println(game.getTile(0, 6));
 		 game.moveUp();
 		 game.moveUp();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 //game.moveRight();
-		 game.moveUp();
-		 game.moveUp();
-		 //game.moveLeft();
-		 game.moveLeft();
-		 game.moveLeft();
-		 game.moveLeft();
-		 game.moveLeft();
-		 game.moveLeft();
-		 game.moveUp();
-		 game.moveUp();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveRight();
-		 System.out.println(game.isGameWon);
+		 //System.out.println(game.getMovedLine());
+		 game.moveDown();
 		 /*game.moveDown();
 		 game.moveDown();
 		 game.moveDown();
