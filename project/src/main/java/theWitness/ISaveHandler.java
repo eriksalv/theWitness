@@ -6,5 +6,5 @@ public interface ISaveHandler {
 	
 	public void save(String filename, GameCollection games) throws FileNotFoundException;
 	
-	public void load(String filename) throws FileNotFoundException;
+	public GameCollection load(String filename) throws FileNotFoundException;
 }

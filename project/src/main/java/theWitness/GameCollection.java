@@ -29,6 +29,12 @@ public class GameCollection {
 		this.name=name;
 	}
 	
+	public int getGameIndex() {
+		return isGamesWon.keySet().stream()
+				.filter(level -> isGamesWon.get(level)==false)
+				.findFirst().orElse(1); //finner det første nivået som ikke er vunnet enda, og hvis ikke det fins returner 1
+	}
+	
 	public Map<Integer,Boolean> getIsGamesWon() {
 		return isGamesWon;
 	}
@@ -48,12 +54,12 @@ public class GameCollection {
 			game.setLevel(level);
 		}
 		else {
-			addGame(game);
+			addGame(game, game.getIsGameWon());
 		}
 	}
-	public void addGame(Game game) {
+	public void addGame(Game game, boolean isGameWon) {
 		games.put(levelCount, game); //legger til et nytt game eller overskriver et som allerede eksisterer (med samme LEVEL)
-		isGamesWon.put(levelCount, game.getIsGameWon());
+		isGamesWon.put(levelCount, isGameWon);
 		
 		game.addGameCollection(this);
 		game.setLevel(levelCount);

@@ -10,6 +10,13 @@ public class Tile {
         this.x = x;
         this.y = y;
     }
+    
+    public void setType(char symbol) {
+    	if ("|-=0#<>S@ ".indexOf(symbol) == -1) {
+    		throw new IllegalArgumentException("Not a valid tile-type");
+    	}
+		type=symbol;		
+	}
 
     public void setLine() {
     	if (x%2==0) {
@@ -50,8 +57,6 @@ public class Tile {
 
     public void setStart() {
         type = 'S';
-        Game.start[0] = y;
-        Game.start[1] = x;
     }
 
     public void setGoal() {

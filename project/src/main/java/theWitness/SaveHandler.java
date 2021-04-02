@@ -2,6 +2,7 @@ package theWitness;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,10 +17,16 @@ import java.util.Set;
 public class SaveHandler implements ISaveHandler {
 	
 	public final static String SAVE_FOLDER = "src/main/resources/saves/";
-	private Set<String> saveFiles = new HashSet<String>();
 	
-	public Set<String> getSaveFiles() {
-		return saveFiles;
+	public static String[] getSaveFiles() {
+		File toList = new File(SAVE_FOLDER);
+		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
+	        @Override
+	        public boolean accept(File f, String name) {
+	            return name.endsWith(".txt");
+	        }
+	    };
+		return toList.list(filter);
 	}	
 	public void save(String filename, GameCollection games) throws FileNotFoundException {
 		try (PrintWriter writer = new PrintWriter(getFilePath(filename))) {
@@ -31,19 +38,47 @@ public class SaveHandler implements ISaveHandler {
 				writer.println(game.getHeight());
 				game.forEach(tile -> writer.print(tile.getType()));
 				writer.println();
+				writer.println(game.getGameStart()[0]);
+				writer.println(game.getGameStart()[1]);
+				writer.println(game.getGameGoal()[0]);
+				writer.println(game.getGameGoal()[1]);
 				writer.println(games.getIsGamesWon().getOrDefault(level, null));
 			});
-			saveFiles.add(filename);
 		}
 
 	}
 	
-	public void load(String filename) throws FileNotFoundException {
+	public GameCollection load(String filename) throws FileNotFoundException {
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
-			while (scanner.hasNextLine()) {
-				System.out.println(scanner.nextLine());
+			GameCollection games = new GameCollection(filename);
+			while (scanner.hasNext()) {
+				int width = scanner.nextInt();
+				int height = scanner.nextInt();
+				Game game = new Game(width, height);
+				
+				scanner.nextLine();
+				
+				String board = scanner.next();
+				for (int y = 0; y < height; y++) {
+					for (int x = 0; x < width; x++) {
+						char symbol = board.charAt(y * width + x);
+						if (!Character.toString(symbol).matches("[-|=0]")) {
+							game.getTile(x, y).setType(symbol); //trenger ikke å sette symbol på "autogenererte" tiles
+						}
+					}
+				}
+				scanner.nextLine();
+				
+				game.setGameStart(scanner.nextInt(), scanner.nextInt());
+				game.setGameGoal(scanner.nextInt(),scanner.nextInt());
+				
+				scanner.nextLine();
+				
+				games.addGame(game, scanner.nextBoolean());
 			}
+			return games;
 		}
+
 	}
 
 	private static String getFilePath(String filename) {
@@ -51,12 +86,16 @@ public class SaveHandler implements ISaveHandler {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		GameCollection gc = new GameCollection("nice",new Game(5,5), new Game(10,10), new Game(4,4));
-		System.out.println(gc.getGames());
-		System.out.println(gc.getIsGamesWon());
-		SaveHandler sh = new SaveHandler();
-		sh.save("test",gc);
-		System.out.println(sh.getSaveFiles());
+//		GameCollection gc = new GameCollection("nice",new Game(5,5), new Game(10,10), new Game(4,4));
+//		System.out.println(gc.getGames());
+//		System.out.println(gc.getIsGamesWon());
+//		SaveHandler sh = new SaveHandler();
+//		sh.save("test",gc);
+//		System.out.println(sh.getSaveFiles());
+		System.out.println(Arrays.asList(getSaveFiles()));
+		SaveHandler s = new SaveHandler();
+		System.out.println(s.load("save_1").getIsGamesWon());
+		System.out.println(s.load("save_1").getGames());
 	}
 
 }

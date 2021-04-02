@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -21,36 +22,61 @@ public class GameController {
 	@FXML private SaveGameController saveGameController;
 	
 	private Game game;
-	private GameCollection games;
-	private int gameIndex = 1;
+	private GameCollection games = null;
+	private int gameIndex;
 	
 	@FXML
 	Pane board;
 	
+	@FXML Label level;
+	@FXML Label hasNextGame;
+	@FXML Label hasPrevGame;
 	@FXML Text winText = new Text();
 	
 	@FXML
 	private void initialize() {
-		Game game1 = new Game(6,6);
-		games = new GameCollection("games",new Game(5,5), new Game(10,10));
-		games.addGame(game1);
+//		Game game1 = new Game(6,6);
+//		games = new GameCollection("games",new Game(5,5), new Game(10,10));
+//		games.addGame(game1);
+		initData(new GameCollection("nice", new Game(5,5), new Game(8,8))); //default games dersom initData ikke blir kalt utenfra 
+	}
+	
+	public void initData(GameCollection games) {
+		this.games=games;
+		updateGameIndex();
 		setInitialGameState();		 
 		createBoard();
 		drawBoard();
 	}
 	
+	private void updateGameIndex() {
+		this.gameIndex=games.getGameIndex();
+	}
+	
+	private void setNextPrevLevels() {
+		if (games.hasNextLevel(gameIndex) && games.getIsGamesWon().get(gameIndex)) {
+			hasNextGame.setVisible(true);
+		}
+		else {
+			hasNextGame.setVisible(false);
+		}
+		if (games.hasPrevLevel(gameIndex)) {
+			hasPrevGame.setVisible(true);
+		}
+		else {
+			hasPrevGame.setVisible(false);
+		}
+	}
+	
 	private void setInitialGameState() {
+		level.setText("Level " + gameIndex);
+		setNextPrevLevels();
+		
 		System.out.println(games.getIsGamesWon());
 		game = games.getGames().getOrDefault(gameIndex, null);
 		game.clear();
-		 
-		game.getTile(1, 1).setWhite();
-		game.getTile(3, 1).setWhite();
-		game.getTile(1, 3).setWhite();
-		game.getTile(3, 3).setBlack();
-		//game.getTile(5,5).setBlack();
-		game.getTile(0, game.getHeight()-1).setStart();
-		game.getTile(game.getWidth()-1, 0).setGoal();
+		game.setGameStart(); //må sette start og goal på nytt siden movedLine overskriver disse
+		game.setGameGoal();
 	}
 	
 	private void createBoard() {
@@ -87,6 +113,9 @@ public class GameController {
 		}
 		
 		if (game.getIsGameWon()) {
+			if (games.hasNextLevel(gameIndex)) {
+				hasNextGame.setVisible(true);
+			}
 			winText.setText("Du vant!");
 			winText.setStyle("-fx-font-size: 100px");
 			winText.setFill(Color.GREEN);
@@ -101,26 +130,20 @@ public class GameController {
 	}
 	@FXML
 	public void keyListener(KeyEvent e) {
-		if (e.getCode() == KeyCode.UP) {
+		if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
 			handleUp();
 		}
-		if (e.getCode() == KeyCode.DOWN) {
+		if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
 			handleDown();
 		}
-		if (e.getCode() == KeyCode.LEFT) {
+		if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
 			handleLeft();
 		}
-		if (e.getCode() == KeyCode.RIGHT) {
+		if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
 			handleRight();
 		}
 		if (e.getCode() == KeyCode.R) {
 			handleReset();
-		}
-		if (e.getCode() == KeyCode.N) {
-			handleNextGame();
-		}
-		if (e.getCode() == KeyCode.DELETE) {
-			handlePrevGame();
 		}
 	}
 	@FXML

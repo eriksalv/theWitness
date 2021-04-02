@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game extends Grid {
 	private int level;
-	protected static int[] start = {0,0};
+	private int[] start = new int[2];
+	private int[] goal = new int[2];
 	
 	private GameCollection gameCollection;
 	
@@ -63,6 +64,39 @@ public class Game extends Grid {
 		return isGameOver;
 	}
 	
+	public void setGameGoal() {
+		getTile(goal[0],goal[1]).setGoal();
+	}
+	public void setGameGoal(int x,int y) {
+		if (!isTile(x,y)) {
+			throw new IllegalArgumentException("goal coordinates out of bounds");
+		}
+		goal[0]=x;
+		goal[1]=y;
+		getTile(x,y).setGoal();
+	}
+	
+	public int[] getGameGoal() {
+		return goal;
+	}
+	
+	public void setGameStart() {
+		getTile(start[0],start[1]).setStart();
+	}
+	
+	public void setGameStart(int x, int y) {
+		if (!isTile(x,y)) {
+			throw new IllegalArgumentException("start coordinates out of bounds" + x + y);
+		}
+		start[0]=x;
+		start[1]=y;
+		getTile(x,y).setStart();
+	}
+	
+	public int[] getGameStart() {
+		return start;
+	}
+	
 	public void addGameCollection(GameCollection gameCollection) {
 		this.gameCollection = gameCollection;
 	}
@@ -76,7 +110,10 @@ public class Game extends Grid {
 	}
 	
 	public void clear() {
-		getGrid().forEach(list -> list.forEach(tile -> tile.setLine()));
+		getGrid()
+		.forEach(list -> list.stream()
+				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><]"))
+				.forEach(tile -> tile.setLine()));
 		isGameWon=false;
 		isCorrectPath=false;
 		firstMove=true;
