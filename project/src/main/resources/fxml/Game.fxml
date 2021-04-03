@@ -74,14 +74,14 @@
                               <Font size="10.0" />
                            </font>
                         </Button>
-                        <Button layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onMouseClicked="#returnToMainView" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🏠">
+                        <Button layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#returnToMainView" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🏠">
                            <font>
                               <Font size="25.0" />
                            </font>
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #70a9e1; -fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
+                  <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
                </children>
             </GridPane>
          </children>

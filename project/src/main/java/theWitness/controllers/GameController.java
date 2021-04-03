@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,7 +42,7 @@ public class GameController {
 	@FXML Label level;
 	@FXML Label hasNextGame;
 	@FXML Label hasPrevGame;
-	@FXML Text winText = new Text();
+	//@FXML Text winText = new Text();
 	
 	@FXML
 	private void initialize() throws FileNotFoundException {
@@ -121,7 +123,7 @@ public class GameController {
 			for (int x = 0; x < game.getWidth(); x++) {
 				board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + ";");
 				if (game.getTile(x, y).isBlack() || game.getTile(x, y).isWhite()) {
-					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + "; -fx-border-width: " + (board.getPrefWidth()/game.getWidth())/3.5 + ";");
+					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + "; -fx-border-width: " + ((board.getPrefHeight()/game.getWidth())/(board.getPrefWidth()/game.getWidth()))*8 + ";");
 				}
 				board.getChildren().get(y*game.getWidth()+x).getStyleClass().add(getTileColor(game.getTile(x, y))[0]);
 			}
@@ -131,16 +133,37 @@ public class GameController {
 			if (games.hasNextLevel(gameIndex)) {
 				hasNextGame.setVisible(true);
 			}
-			winText.setText("Du vant!");
-			winText.setStyle("-fx-font-size: 100px");
-			winText.setFill(Color.GREEN);
+			//winText.setText("✓");
+			//winText.setStyle("-fx-font-size: 100px");
+			//winText.setFill(Color.GREEN);
+			for (int y = 0; y < game.getHeight(); y++) {
+				for (int x = 0; x < game.getWidth(); x++) {
+					if (game.getTile(x, y).isMovedLine()) {
+						board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: green;");
+					}
+				}
+			}
 			//winText.setStyle("-fx-background-color:blue");
-			winText.setTranslateX(160.0);
-			winText.setTranslateY(200.0);
-			board.getChildren().add(winText);
+			//winText.setTranslateX(board.getWidth()/2);
+			//winText.setTranslateY(board.getHeight()/2);
+			//board.getChildren().add(winText);
 		}
 		if (game.isGameOver()) {
-			handleReset(); //resetter automatisk når linjen ikke er korrekt
+			for (int y = 0; y < game.getHeight(); y++) {
+				for (int x = 0; x < game.getWidth(); x++) {
+					if (game.getTile(x, y).isMovedLine() || game.getTile(x, y).isLastMovedLine()) {
+						board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: #e5303a;");
+					}
+				}
+			}
+			new Timer().schedule(
+				    new TimerTask() {
+
+				        @Override
+				        public void run() {
+				            handleReset(); //kjører handleReset etter en liten delay
+				        }
+				    }, 300);
 		}
 	}
 	@FXML
@@ -201,9 +224,9 @@ public class GameController {
 	}
 	@FXML
 	public void handleReset() {
-		if (board.getChildren().contains(winText)) {
-			board.getChildren().remove(winText);
-		}
+		//if (board.getChildren().contains(winText)) {
+		//	board.getChildren().remove(winText);
+		//}
 		setInitialGameState();
 		drawBoard();
 	}
@@ -260,24 +283,24 @@ public class GameController {
     	} else if(tile.isMovedLine() || tile.isLastMovedLine()) {
     		//return "#a26f42";
     		//return "movedLine";
-    		String[] color = {"movedLine", "#00bebe"};
+    		String[] color = {"movedLine", "silver"};
     		return color;
     	} else if(tile.isStart()) {
     		//return "#e5303a";
     		//return "start";
-    		String[] color = {"start", "#e5303a"};
+    		String[] color = {"start", "green"};
     		return color;
     	} else if(tile.isGoal()) {
     		//return "#f6ec5a";
     		//return "goal";
-    		String[] color = {"goal", "#f6ec5a"};
+    		String[] color = {"goal", "#e5303a"};
     		return color;
     	} else if(tile.isBlank()) {
     		String[] color = {"blank", "black"};
     		return color;
     	} else {
     		//return "normal";
-    		String[] color = {"normal", "#00003f"};
+    		String[] color = {"normal", "black"};
     		return color;
     	}
     }
