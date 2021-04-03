@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class MainController {
@@ -40,7 +41,16 @@ public class MainController {
 	}
 	
 	@FXML
-	private void handleContinue() {
-		
+	private void handleNewGame(MouseEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("Game.fxml"));
+        Parent tableViewParent = loader.load();
+        
+        Scene tableViewScene = new Scene(tableViewParent);        
+        //This line gets the Stage information
+        Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
+        
+        window.setScene(tableViewScene);
+        window.show();
 	}
 }

@@ -112,7 +112,7 @@ public class Game extends Grid {
 	public void clear() {
 		getGrid()
 		.forEach(list -> list.stream()
-				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><]"))
+				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><_]")) //tile typer som ikke skal resettes
 				.forEach(tile -> tile.setLine()));
 		isGameWon=false;
 		isCorrectPath=false;

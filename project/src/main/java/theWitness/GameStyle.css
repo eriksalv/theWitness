@@ -24,9 +24,12 @@
 .movedLine {
 	/*-fx-background-color:#1F51FF;*/
 }
- .black {
+.black {
 	-fx-border-color:#70a9e1;
 }
 .white {
 	-fx-border-color:#70a9e1;
+}
+.blank {
+	-fx-opacity:0;
 }

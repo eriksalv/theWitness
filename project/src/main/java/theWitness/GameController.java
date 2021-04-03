@@ -1,7 +1,10 @@
 package theWitness;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,11 +39,17 @@ public class GameController {
 	@FXML Text winText = new Text();
 	
 	@FXML
-	private void initialize() {
+	private void initialize() throws FileNotFoundException {
 //		Game game1 = new Game(6,6);
 //		games = new GameCollection("games",new Game(5,5), new Game(10,10));
 //		games.addGame(game1);
-		initData(new GameCollection("nice", new Game(5,5), new Game(8,8))); //default games dersom initData ikke blir kalt utenfra 
+		GameCollection newGame = new GameCollection("new game");
+		List<LevelEnumerator> levelList = Arrays.asList(LevelEnumerator.values());
+		System.out.println(levelList);
+		for (int i=2;i<levelList.size();i++) {
+			newGame.addGame(levelList.get(i).startingTiles(), i-1);
+		}
+		initData(newGame); //default games dersom initData ikke blir kalt utenfra 
 	}
 	
 	public void initData(GameCollection games) {
@@ -258,6 +267,9 @@ public class GameController {
     		//return "#f6ec5a";
     		//return "goal";
     		String[] color = {"goal", "#f6ec5a"};
+    		return color;
+    	} else if(tile.isBlank()) {
+    		String[] color = {"blank", "black"};
     		return color;
     	} else {
     		//return "normal";

@@ -17,7 +17,7 @@
             </Label>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleContinue" prefHeight="25.0" prefWidth="76.0" text="Continue" />
+                  <Button mnemonicParsing="false" onMouseClicked="#handleNewGame" prefHeight="25.0" prefWidth="76.0" text="New Game" />
                   <Button mnemonicParsing="false" onAction="#openLoadView" text="Load Game" />
                </children>
             </VBox>

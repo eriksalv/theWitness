@@ -12,7 +12,7 @@ public class Tile {
     }
     
     public void setType(char symbol) {
-    	if ("|-=0#<>S@ ".indexOf(symbol) == -1) {
+    	if ("|-=0#<>S@_".indexOf(symbol) == -1) {
     		throw new IllegalArgumentException("Not a valid tile-type");
     	}
 		type=symbol;		
@@ -52,7 +52,7 @@ public class Tile {
     }
     
     public void setBlank() {
-    	type = ' ';
+    	type = '_';
     }
 
     public void setStart() {
@@ -88,7 +88,7 @@ public class Tile {
     }
 
     public boolean isBlank() {
-        return type == ' ';
+        return type == '_';
     }
     
     public boolean isStart() {
