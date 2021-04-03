@@ -214,76 +214,7 @@ public class Game extends Grid {
 	}*/
     
     private boolean checkCorrectPath() {                                       //WTF?????
-    	List<Tile> movedLine = new ArrayList<Tile>(moves.keySet());
-    	List<String> moveOrder = new ArrayList<String>(moves.values());
-    	System.out.println(movedLine);
-    	System.out.println(moveOrder);
-    	
-    	List<Set<Tile>> partitions = new ArrayList<Set<Tile>>();    	
-    	partitions.add(new HashSet<Tile>());
-    	partitions.add(new HashSet<Tile>());
-    	
-    	HashSet<Character> sector1 = new HashSet<Character>();
-    	HashSet<Character> sector2 = new HashSet<Character>();
-    	
-    	for (int i=1;i<movedLine.size();i++) {
-    		AtomicInteger nextX1 = new AtomicInteger(0); //AtomicInteger hjelper med objektreferanser
-        	AtomicInteger nextY1 = new AtomicInteger(0);
-        	AtomicInteger nextX2 = new AtomicInteger(0);
-        	AtomicInteger nextY2 = new AtomicInteger(0);
-    		AtomicInteger counterObject = new AtomicInteger(0);
-    		//int counter = 0;
-    		//Tile nextTile = new Tile();
-    		//(movedLine.get(i+1).getX()-movedLine.get(i).getX()!=1 && movedLine.get(i+1).getY()-movedLine.get(i).getY()!=1) ||
-    		if (moveOrder.get(i).equals("Up")) {
-    			nextX1.set(-1);   				
-    			nextX2.set(1);
-    			nextY1=counterObject;
-    			nextY2=counterObject;
-    		}
-    		if (moveOrder.get(i).equals("Down")) {
-    			nextX1.set(-1);    				
-    			nextX2.set(1);
-    			nextY1=counterObject;
-    			nextY2=counterObject;
-    		}
-    		if (moveOrder.get(i).equals("Left")) {
-    			nextX1=counterObject;    				
-    			nextX2=counterObject;
-    			nextY1.set(-1);
-    			nextY2.set(1);
-    		}
-    		if (moveOrder.get(i).equals("Right")) { //Funker bare rett ved siden av
-    			nextX1=counterObject;    				
-    			nextX2=counterObject;
-    			nextY1.set(1);
-    			nextY2.set(-1);
-    		}
-    		//Tile[][] nextTile = new Tile[movedLine.get(i).getX()+nextX1.get()][movedLine.get(i).getY()-nextY1.get()];
-    		//System.out.println(nextTile);
-    		while (isTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()) && !getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isMovedLine()) { 
-    			if (getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isWhite() || getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).isBlack()) {
-    				partitions.get(0).add(getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()));
-    				sector1.add(getTile(movedLine.get(i).getX()+nextX1.get(),movedLine.get(i).getY()-nextY1.get()).getType());
-    			}
-    			//counter++;
-    			counterObject.getAndIncrement();
-    		}
-    		while (isTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()) && !getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isMovedLine()) {
-    			if (getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isWhite() || getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).isBlack()) {
-    				partitions.get(1).add(getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()));
-    				sector2.add(getTile(movedLine.get(i).getX()+nextX2.get(),movedLine.get(i).getY()-nextY2.get()).getType());
-    			}
-    			//counter++;
-    			counterObject.getAndIncrement();
-    		}
-    	}
-    	System.out.println(sector1);
-    	System.out.println(sector2);
-    	if (sector1.size()>1 || sector2.size()>1) { //hvis det er mer enn 1 element i hvert sektor-set betyr det at det er en hvit og en svart i en sektor
-    		return false;
-    	}
-    	return true;
+    	return PathChecker.checkPath(this);    	
     }
     
     private boolean validateMove(int x, int y, Tile targetTile, boolean throwException) {		

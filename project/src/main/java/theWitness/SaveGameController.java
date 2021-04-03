@@ -31,12 +31,12 @@ public class SaveGameController {
 	@FXML private DialogPane saveMessage;
 	@FXML private Label closeSaveMessage;
 	@FXML private Label returnToGameView;
+	@FXML private Label returnToMainView;
 	@FXML private Label header;
 	@FXML private Button createAndSave;
 	@FXML private Button load;
 	
 	private GameCollection toSave;
-	private GameCollection toLoad;
 	private SaveHandler saveHandler = new SaveHandler();
 	   
 	@FXML
@@ -50,6 +50,7 @@ public class SaveGameController {
 		createAndSave.setVisible(false);
 		load.setVisible(true);
 		returnToGameView.setVisible(false);
+		returnToMainView.setVisible(true);
 	}
 	
 	@FXML

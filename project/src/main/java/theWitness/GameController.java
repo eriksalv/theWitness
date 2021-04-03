@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 public class GameController {
 	
 	@FXML private SaveGameController saveGameController;
+	@FXML private MainController mainController;
 	
 	private Game game;
 	private GameCollection games = null;
@@ -210,6 +212,26 @@ public class GameController {
         window.setScene(tableViewScene);
         window.show();
 	}
+	
+	@FXML
+	private void returnToMainView(MouseEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("Main.fxml"));
+        Parent tableViewParent = loader.load();
+        
+        Scene tableViewScene = new Scene(tableViewParent);
+        
+        //access the controller and call a method
+        MainController controller = loader.getController();
+        controller.initData(games);
+        
+        //This line gets the Stage information
+        Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
+        
+        window.setScene(tableViewScene);
+        window.show();
+	}
+	
 	private String[] getTileColor(Tile tile) {
     	if (tile.isWhite()) { 
     		//return "#1db121"; //kan rendomizes

@@ -22,6 +22,7 @@
                </header>
             </DialogPane>
             <Label fx:id="returnToGameView" layoutX="452.0" layoutY="14.0" onMouseClicked="#handleOpenGameView" text="❌" />
+            <Label fx:id="returnToMainView" layoutX="452.0" layoutY="14.0" onMouseClicked="#returnToMainView" text="❌" visible="false" />
          </children>
       </Pane>
    </children>

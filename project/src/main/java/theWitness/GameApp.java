@@ -46,7 +46,7 @@ public class GameApp extends Application {
 		
 		primaryStage.getIcons().add(new Image("file:" + getFileFromResource("images/icon.jpg").getAbsolutePath()));
 		Scene scene = new Scene(parent);
-		scene.getStylesheets().add(getClass().getResource("GameStyle.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("GameStyle.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
