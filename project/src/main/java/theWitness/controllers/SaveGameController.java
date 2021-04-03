@@ -1,4 +1,4 @@
-package theWitness;
+package theWitness.controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,6 +17,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import theWitness.GameCollection;
+import theWitness.SaveHandler;
 
 public class SaveGameController {
 	private boolean isLoad;
@@ -56,7 +58,7 @@ public class SaveGameController {
 	@FXML
 	private void returnToMainView(MouseEvent e) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Main.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/Main.fxml"));
         Parent tableViewParent = loader.load();
         
         Scene tableViewScene = new Scene(tableViewParent);
@@ -76,7 +78,7 @@ public class SaveGameController {
 	@FXML
 	private void handleOpenGameView(MouseEvent e) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Game.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/Game.fxml"));
         Parent tableViewParent = loader.load();
         
         Scene tableViewScene = new Scene(tableViewParent);

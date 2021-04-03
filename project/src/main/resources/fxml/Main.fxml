@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main" prefHeight="647.0" prefWidth="500.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.MainController">
+<AnchorPane fx:id="main" prefHeight="647.0" prefWidth="500.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.MainController">
    <children>
       <VBox alignment="CENTER" layoutX="15.0" layoutY="16.0" prefHeight="616.0" prefWidth="470.0">
          <children>

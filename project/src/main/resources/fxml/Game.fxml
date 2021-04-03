@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="game" prefHeight="647.0" prefWidth="500.0" style="-fx-background-color: grey;" stylesheets="@GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.GameController">
+<AnchorPane fx:id="game" prefHeight="647.0" prefWidth="500.0" style="-fx-background-color: grey;" stylesheets="/style/GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.GameController">
    <children>
       <VBox alignment="CENTER" layoutX="10.0" prefHeight="639.0" prefWidth="480.0">
          <children>

@@ -41,7 +41,7 @@ public class GameApp extends Application {
 		
 		///////////////////////////////////////
 		        
-		Parent parent = FXMLLoader.load(getClass().getResource("Main.fxml"));
+		Parent parent = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
 		primaryStage.setTitle("The Witness");
 		
 		primaryStage.getIcons().add(new Image("file:" + getFileFromResource("images/icon.jpg").getAbsolutePath()));

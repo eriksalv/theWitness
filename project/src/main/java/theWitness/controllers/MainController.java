@@ -1,4 +1,4 @@
-package theWitness;
+package theWitness.controllers;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import theWitness.GameCollection;
 
 public class MainController {
 	
@@ -24,7 +25,7 @@ public class MainController {
 	@FXML
 	private void openLoadView(ActionEvent e) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("SaveGame.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/SaveGame.fxml"));
         Parent tableViewParent = loader.load();
         
         Scene tableViewScene = new Scene(tableViewParent);
@@ -43,7 +44,7 @@ public class MainController {
 	@FXML
 	private void handleNewGame(MouseEvent e) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("Game.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/Game.fxml"));
         Parent tableViewParent = loader.load();
         
         Scene tableViewScene = new Scene(tableViewParent);        
