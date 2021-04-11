@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Game extends Grid {
 	private int level;
 	private int[] start = new int[2];
 	private int[] goal = new int[2];
+	private List<Boolean> ruleList = new ArrayList<Boolean>(Arrays.asList(false,false)); 
 	
 	private GameCollection gameCollection;
 	
@@ -125,6 +127,7 @@ public class Game extends Grid {
 	private void drawLine(int dx, int dy, String move) {		
 		//hvis spillet ikke har startet enda, må start-ruten endre seg
 		if (firstMove) { 
+			setRuleList(); // setter reglene for dette gamet
 			getStreamFromIterator().filter(tile -> tile.isStart()).forEach(tile -> {
 				tile.setMovedLine();
 				moves.put(tile, move);
@@ -213,6 +216,20 @@ public class Game extends Grid {
 		return !targetTile.hasCollision() || tileIsSnakeTail;
 	}*/
     
+    public void setRuleList() {
+    	if (getStreamFromIterator().anyMatch(tile -> tile.isBlack() || tile.isWhite())) {
+    		ruleList.set(0, true);
+    	}
+    	if (getStreamFromIterator().anyMatch(tile -> tile.getContainsDot())) {
+    		ruleList.set(1, true);
+    	}
+    	
+    }
+    
+    public List<Boolean> getRuleList() {
+    	return ruleList;
+    }
+    
     private boolean checkCorrectPath() {                                       //WTF?????
     	return PathChecker.checkPath(this);    	
     }
@@ -246,18 +263,36 @@ public class Game extends Grid {
     }
 	
 	public static void main(String[] args) {
-		 Game game = new Game(7, 7);
+		 Game game = new Game(5, 5);
+		 GameCollection games = new GameCollection("", game);
 		 
-		 game.getTile(1, 1).setWhite();
-		 game.getTile(5,5).setBlack();
-		 game.getTile(0, game.getHeight()-1).setStart();
-		 game.getTile(game.getWidth()-1, 0).setGoal();
+		 game.setGameStart(0, 2);
+		 game.setGameGoal(4,2);
+		 game.getTile(1, 1).setBlack();
+		 game.getTile(3, 1).setWhite();
+		 game.getTile(2, 2).setDot();
+		 
 		 System.out.println(game);
-		 System.out.println(game.getTile(0, 6));
+		 
+		 game.moveRight();
+		 game.moveRight();
 		 game.moveUp();
 		 game.moveUp();
-		 //System.out.println(game.getMovedLine());
+		 game.moveRight();
+		 game.moveRight();
 		 game.moveDown();
+		 game.moveDown();
+		 
+//		 game.moveDown();
+//		 game.moveDown();
+//		 game.moveRight();
+//		 game.moveRight();
+//		 game.moveRight();
+//		 game.moveRight();
+//		 game.moveUp();
+//		 game.moveUp();
+		 
+		 
 		 /*game.moveDown();
 		 game.moveDown();
 		 game.moveDown();

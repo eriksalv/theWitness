@@ -18,7 +18,7 @@ public class SaveHandler implements ISaveHandler {
 	
 	public final static String SAVE_FOLDER = "src/main/resources/saves/";
 	
-	public static String[] getSaveFiles() {
+	public static final String[] getSaveFiles() {
 		File toList = new File(SAVE_FOLDER);
 		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
 	        @Override
@@ -36,7 +36,13 @@ public class SaveHandler implements ISaveHandler {
 				Game game = games.getGames().getOrDefault(level, null); //finner hvilket game som hører til hver level
 				writer.println(game.getWidth());
 				writer.println(game.getHeight());
-				game.forEach(tile -> writer.print(tile.getType()));
+				game.forEach(tile -> {
+					if (tile.getContainsDot()) {
+						writer.print('.');
+					} else {
+						writer.print(tile.getType());
+					}
+				});
 				writer.println();
 				writer.println(game.getGameStart()[0]);
 				writer.println(game.getGameStart()[1]);
@@ -62,8 +68,12 @@ public class SaveHandler implements ISaveHandler {
 				for (int y = 0; y < height; y++) {
 					for (int x = 0; x < width; x++) {
 						char symbol = board.charAt(y * width + x);
-						if (!Character.toString(symbol).matches("[-|=0]")) {
-							game.getTile(x, y).setType(symbol); //trenger ikke å sette symbol på "autogenererte" tiles
+						if (!Character.toString(symbol).matches("[-|=0]")) { //trenger ikke å sette symbol på "autogenererte" tiles
+							if (symbol=='.' ) {
+								game.getTile(x, y).setDot();
+							} else {
+								game.getTile(x, y).setType(symbol); 
+							}
 						}
 					}
 				}
@@ -81,7 +91,7 @@ public class SaveHandler implements ISaveHandler {
 
 	}
 
-	private static String getFilePath(String filename) {
+	public static final String getFilePath(String filename) {
 		return SAVE_FOLDER + filename + ".txt";
 	}
 	

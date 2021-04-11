@@ -1,7 +1,9 @@
 package theWitness.controllers;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -68,10 +71,16 @@ public class GameController {
 	
 	private void updateGameIndex() {
 		this.gameIndex=games.getGameIndex();
+		if (gameIndex<10) {
+			board.getStyleClass().add("world1");
+		}
+		else {
+			board.getStyleClass().add("world2");
+		}
 	}
 	
 	private void setNextPrevLevels() {
-		if (games.hasNextLevel(gameIndex) && games.getIsGamesWon().get(gameIndex)) {
+		if (games.hasNextLevel(gameIndex)) {
 			hasNextGame.setVisible(true);
 		}
 		else {
@@ -106,6 +115,7 @@ public class GameController {
 			Pane tile = new Pane();
 			tile.setPrefHeight(tileHeight);
 			tile.setPrefWidth(tileWidth);
+			tile.setMaxHeight(tileHeight);
 			tile.setTranslateX((40+gameTile.getX()*tileWidth));
 			tile.setTranslateY((10+gameTile.getY()*tileHeight));
 			/*tile.setStyle("-fx-border-color: black;\n"
@@ -121,9 +131,27 @@ public class GameController {
 	private void drawBoard() {
 		for (int y = 0; y < game.getHeight(); y++) {
 			for (int x = 0; x < game.getWidth(); x++) {
-				board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + ";");
+				board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1]);
 				if (game.getTile(x, y).isBlack() || game.getTile(x, y).isWhite()) {
-					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + "; -fx-border-width: " + ((board.getPrefHeight()/game.getWidth())/(board.getPrefWidth()/game.getWidth()))*8 + ";");
+					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: " + getTileColor(game.getTile(x, y))[1] + "; -fx-border-width: " + board.getPrefHeight()/game.getHeight()/3.5 + ";");
+					if (gameIndex>=10) {
+						board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-border-color:lightgreen; -fx-background-color: " + getTileColor(game.getTile(x, y))[1] + "; -fx-border-width: " + board.getPrefHeight()/game.getHeight()/3.5 + ";");
+					}
+				}
+				if (game.getTile(x, y).getContainsDot()) {
+					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-border-width: " + board.getPrefHeight()/game.getHeight()/2.5 + ";");
+//					try {
+//						ImageView img = new ImageView((new File("src/main/resources/images/tetrisTest.png")).toURI().toURL().toExternalForm());
+//						img.setFitHeight(board.getPrefHeight()/game.getHeight());
+//						img.setFitWidth(board.getPrefWidth()/game.getWidth());
+//						((Pane) board.getChildren().get(y*game.getWidth() + x)).getChildren().add(img);
+//					} catch (MalformedURLException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+				}
+				if (game.getTile(x, y).getContainsDot() && (game.getTile(x, y).isMovedLine() || game.getTile(x, y).isLastMovedLine())) {
+					board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-border-color:#87CEEB; -fx-border-width: " + board.getPrefHeight()/game.getHeight()/2.5 + ";");
 				}
 				board.getChildren().get(y*game.getWidth()+x).getStyleClass().add(getTileColor(game.getTile(x, y))[0]);
 			}
@@ -139,7 +167,7 @@ public class GameController {
 			for (int y = 0; y < game.getHeight(); y++) {
 				for (int x = 0; x < game.getWidth(); x++) {
 					if (game.getTile(x, y).isMovedLine()) {
-						board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: green;");
+						board.getChildren().get(y*game.getWidth() + x).setStyle("-fx-background-color: white; -fx-border-width:0;");
 					}
 				}
 			}
@@ -188,6 +216,10 @@ public class GameController {
 	public void handleNextGame() {
 		if (games.hasNextLevel(gameIndex)) { //Hvis isGameWon er true for gamet man er på
 			gameIndex++;
+			if (gameIndex==10) {
+				board.getStyleClass().remove("wordl1");
+				board.getStyleClass().add("world2");
+			}
 			setInitialGameState();
 			createBoard();
 			drawBoard();
@@ -197,6 +229,11 @@ public class GameController {
 	public void handlePrevGame() {
 		if (games.hasPrevLevel(gameIndex)) {
 			gameIndex--;
+			System.out.println(gameIndex);
+			if (gameIndex==9) {
+				board.getStyleClass().remove("world2");
+				board.getStyleClass().add("world1");
+			}
 			setInitialGameState();
 			createBoard();
 			drawBoard();
@@ -274,7 +311,8 @@ public class GameController {
     		//return "white";
     		String[] color = {"white", "white"};
     		return color;
-    	} else if(tile.isBlack()) {
+    	} 
+    	else if(tile.isBlack()) {
     		//return "#24d628";
     		//return "black";
     		//tile.setStyle("-fx-border-width:20;");
@@ -283,12 +321,17 @@ public class GameController {
     	} else if(tile.isMovedLine() || tile.isLastMovedLine()) {
     		//return "#a26f42";
     		//return "movedLine";
-    		String[] color = {"movedLine", "silver"};
+    		String[] color = {"movedLine", "#87CEEB"};
     		return color;
-    	} else if(tile.isStart()) {
+    	}
+    	else if(tile.getContainsDot()) { //viktig at denne kommer etter movedLine-skjekken
+    		String[] color = {"dot", "purple"};
+    		return color;
+    	}
+    	else if(tile.isStart()) {
     		//return "#e5303a";
     		//return "start";
-    		String[] color = {"start", "green"};
+    		String[] color = {"start", "#87CEEB"};
     		return color;
     	} else if(tile.isGoal()) {
     		//return "#f6ec5a";
@@ -300,7 +343,7 @@ public class GameController {
     		return color;
     	} else {
     		//return "normal";
-    		String[] color = {"normal", "black"};
+    		String[] color = {"normal", "#0e0e47"};
     		return color;
     	}
     }

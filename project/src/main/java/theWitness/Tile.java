@@ -1,10 +1,10 @@
 package theWitness;
 
 public class Tile {
-	
 	private char type = ' ';
     private int x;
     private int y;
+    private boolean containsDot;
 
     public Tile(int x, int y) {
         this.x = x;
@@ -12,10 +12,15 @@ public class Tile {
     }
     
     public void setType(char symbol) {
-    	if ("|-=0#<>S@_".indexOf(symbol) == -1) {
+    	if ("|-=0#<>S@_.".indexOf(symbol) == -1) {
     		throw new IllegalArgumentException("Not a valid tile-type");
     	}
-		type=symbol;		
+    	else if (symbol=='.') {
+    		containsDot=true;
+    	}
+    	else {
+    		type=symbol;
+    	}		
 	}
 
     public void setLine() {
@@ -25,6 +30,17 @@ public class Tile {
     	else {
     		type = '-';
     	}
+    }
+    
+    public void setDot() {
+    	if (hasCollision()) {
+    		throw new IllegalArgumentException("Cannot put a dot on a tile with collision");
+    	}
+    	containsDot=true;
+    }
+    
+    public boolean getContainsDot() {
+    	return containsDot;
     }
     
     public char getType() {

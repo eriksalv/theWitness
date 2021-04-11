@@ -9,10 +9,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PathChecker {
 		
 	public static boolean checkPath(Game game) {
-		return checkBlackWhite(game);
+		return checkBlackWhite(game) && checkDots(game);
+	}
+	
+	private static boolean checkDots(Game game) {
+		//hvis en vanlig linje inneholder en dot, betyr det at man ikke har beveget seg gjennom den.
+		if (game.getStreamFromIterator().anyMatch(tile -> tile.getContainsDot() && tile.isLine())) { 
+			return false;
+		}
+		return true;
 	}
 	
 	private static boolean checkBlackWhite(Game game) {
+		if (game.getRuleList().get(0)==false) { //hvis gamet ikke inneholder svarte/hvite ruter, skal metoden returnere true med en gang
+			return true;
+		}
 		List<Tile> movedLine = new ArrayList<Tile>(game.getMoves().keySet());
     	List<String> moveOrder = new ArrayList<String>(game.getMoves().values());
     	System.out.println(movedLine);
@@ -125,7 +136,7 @@ public class PathChecker {
     	}
     	System.out.println(sector1);
     	System.out.println(sector2);
-    	if (sector1.size()>1 || sector2.size()>1) { //hvis det er mer enn 1 element i hvert sektor-set betyr det at det er en hvit og en svart i en sektor
+    	if (sector1.size()>1 || sector2.size()>1 || sector1.size()+sector2.size()==1) { //hvis det er mer enn 1 element i hvert sektor-set betyr det at det er en hvit og en svart i en sektor
     		return false;
     	}
     	return true;

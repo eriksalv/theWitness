@@ -2,7 +2,13 @@
 	-fx-base:#001a66;
 }
 #board {
-	-fx-background-color:#001a66;
+	/*-fx-background-color:#001a66;*/
+}
+.world1 {
+	-fx-background-color:#3d3dd4;
+}
+.world2 {
+	-fx-background-color:lightgreen;
 }
 .button {
     -fx-font: bold 20pt "Arial";
@@ -19,25 +25,26 @@
 	-fx-overflow:hidden;
 }
 .start {
-	-fx-background-color:white;
-	-fx-border-radius:50%;
-	-fx-border-style:solid;
-	-fx-border-width:5;
-	-fx-border-color:white;
-	-fx-background-clip:padding-box;
+	
 }
 .goal {
 	-fx-background-color:#00A86B;
 }
 .movedLine {
 	/*-fx-background-color:#1F51FF;*/
+	-fx-border-width:0;
 }
 .black {
-	-fx-border-color:#70a9e1;
+	-fx-border-color:#3d3dd4;
 }
 .white {
-	-fx-border-color:#70a9e1;
+	-fx-border-color:#3d3dd4;
 }
 .blank {
 	-fx-opacity:0;
+}
+.dot {
+	-fx-border-style:solid;
+	-fx-border-color:#0e0e47;
+	-fx-background-color:purple;
 }

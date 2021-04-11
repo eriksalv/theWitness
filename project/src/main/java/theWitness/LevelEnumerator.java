@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 	
-	EMPTY, INTEGRATIONTEST, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9;
+	EMPTY, INTEGRATIONTEST, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10, LEVEL_11, LEVEL_12, LEVEL_13, LEVEL_14, LEVEL_15;
 	
 	public final static String SAVE_FOLDER = "src/main/resources/config/";
 
@@ -23,7 +23,7 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 
 	@Override
 	public void save(String filename, GameCollection games) throws FileNotFoundException {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException(); //Det skal ikke være mulig å lagre et enkelt nivå
 		
 	}
 
@@ -36,7 +36,7 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 							
 			game.setGameStart(scanner.nextInt(), scanner.nextInt());
 			game.setGameGoal(scanner.nextInt(),scanner.nextInt());
-			
+						
 			while (scanner.hasNext()) {
 				game.getTile(scanner.nextInt(), scanner.nextInt()).setType(scanner.next().charAt(0));
 			}				
