@@ -1,7 +1,7 @@
 package theWitness;
 
 public class Tile {
-	private char type = ' ';
+	private char type = '_';
     private int x;
     private int y;
     private boolean containsDot;

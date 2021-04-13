@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,10 +17,25 @@ import java.util.Set;
 
 public class SaveHandler implements ISaveHandler {
 	
-	public final static String SAVE_FOLDER = "src/main/resources/saves/";
+	//public final static String SAVE_FOLDER = "src/main/resources/saves/";
+	public final static String SAVE_FOLDER = "saves/";
 	
-	public static final String[] getSaveFiles() {
-		File toList = new File(SAVE_FOLDER);
+	private Path getFilePathFromResource() throws URISyntaxException { //henter filer fra src/main/resources
+		ClassLoader classLoader = getClass().getClassLoader();
+	    URL resource = classLoader.getResource(SAVE_FOLDER);
+	    if (resource == null) {
+	        throw new IllegalArgumentException("file not found! " + SAVE_FOLDER);
+	    } else {
+	    		// failed if files have whitespaces or special characters
+	            //return new File(resource.getFile());
+          return (new File(resource.toURI())).toPath();
+	    }
+
+	}
+	public static final String[] getSaveFiles() throws URISyntaxException {
+		//File toList = new File(SAVE_FOLDER);
+		//File toList = SAVE_FOLDER.toFile();
+		File toList = (new SaveHandler()).getFilePathFromResource().toFile();
 		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
 	        @Override
 	        public boolean accept(File f, String name) {
@@ -28,7 +44,7 @@ public class SaveHandler implements ISaveHandler {
 	    };
 		return toList.list(filter);
 	}	
-	public void save(String filename, GameCollection games) throws FileNotFoundException {
+	public void save(String filename, GameCollection games) throws FileNotFoundException, URISyntaxException {
 		try (PrintWriter writer = new PrintWriter(getFilePath(filename))) {
 //			List<Integer> sortedGamesList = new ArrayList<Integer>(games.getIsGamesWon().keySet());
 //			Collections.sort(sortedGamesList);
@@ -54,7 +70,7 @@ public class SaveHandler implements ISaveHandler {
 
 	}
 	
-	public GameCollection load(String filename) throws FileNotFoundException {
+	public GameCollection load(String filename) throws FileNotFoundException, URISyntaxException {
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
 			GameCollection games = new GameCollection(filename);
 			while (scanner.hasNext()) {
@@ -91,11 +107,11 @@ public class SaveHandler implements ISaveHandler {
 
 	}
 
-	public static final String getFilePath(String filename) {
-		return SAVE_FOLDER + filename + ".txt";
+	public static final String getFilePath(String filename) throws URISyntaxException {
+		return (new SaveHandler()).getFilePathFromResource().toString() + "\\" + filename + ".txt";
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
 //		GameCollection gc = new GameCollection("nice",new Game(5,5), new Game(10,10), new Game(4,4));
 //		System.out.println(gc.getGames());
 //		System.out.println(gc.getIsGamesWon());
@@ -103,9 +119,10 @@ public class SaveHandler implements ISaveHandler {
 //		sh.save("test",gc);
 //		System.out.println(sh.getSaveFiles());
 		System.out.println(Arrays.asList(getSaveFiles()));
-		SaveHandler s = new SaveHandler();
-		System.out.println(s.load("save_1").getIsGamesWon());
-		System.out.println(s.load("save_1").getGames());
+//		SaveHandler s = new SaveHandler();
+//		System.out.println(s.load("save_1").getIsGamesWon());
+//		System.out.println(s.load("save_1").getGames());
+		System.out.println(getFilePath("level15"));
 	}
 
 }

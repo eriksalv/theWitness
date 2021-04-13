@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PathChecker {
 		
-	public static boolean checkPath(Game game) {
-		return checkBlackWhite(game) && checkDots(game);
+	public static final boolean checkPath(Game game) {
+		return checkBlackWhiteNew(game) && checkDots(game);
 	}
 	
 	private static boolean checkDots(Game game) {
@@ -20,6 +21,91 @@ public class PathChecker {
 		return true;
 	}
 	
+	private static boolean checkBlackWhiteNew(Game game) {
+		AtomicBoolean gameWon = new AtomicBoolean(true); //wrapper klasse for å endre verdi i lambda uttrykk
+		game.getStreamFromIterator().filter(tile -> tile.isBlack() || tile.isWhite()).forEach(tile -> {
+			Tile startingTile = game.getTile(tile.getX(), tile.getY());
+			Set<Tile> surroundingTiles = findSurroundingTiles(game,startingTile);
+			surroundingTiles.add(startingTile);
+			if (surroundingTiles.stream().anyMatch(t -> t.isBlack()) && surroundingTiles.stream().anyMatch(t -> t.isWhite())) {
+				gameWon.set(false); //dersom det både er anymatch for både black og white i samme område settes gameWon til false
+			}
+			System.out.println(surroundingTiles);
+		});
+		return gameWon.get();
+	}
+	
+	private static Set<Tile> findSurroundingTiles(Game game, Tile startingTile) { //veldig treg algoritme, men den funker.. :)
+		
+		AtomicInteger x = new AtomicInteger(startingTile.getX());
+		AtomicInteger y = new AtomicInteger(startingTile.getY());
+		Set<Tile> surroundingTiles = new HashSet<Tile>();
+		
+		//Går mot høyre
+		while (isNotBorder(game,x.get()+1,y.get())) { 
+			surroundingTiles.add(game.getTile(x.incrementAndGet(), y.get()));
+			//går ned
+			while (isNotBorder(game,x.get(),y.get()+1)) {
+				surroundingTiles.add(game.getTile(x.get(), y.incrementAndGet()));
+			}
+			y.set(startingTile.getY()); //resetter y-verdi
+			//går opp
+			while (isNotBorder(game,x.get(),y.get()-1)) {
+				surroundingTiles.add(game.getTile(x.get(), y.decrementAndGet()));
+			}
+			y.set(startingTile.getY());
+		}
+		x.set(startingTile.getX());
+		//går mot venstre
+		while (isNotBorder(game,x.get()-1,y.get())) {
+			surroundingTiles.add(game.getTile(x.decrementAndGet(), y.get()));
+			//går ned
+			while (isNotBorder(game,x.get(),y.get()+1)) {
+				surroundingTiles.add(game.getTile(x.get(), y.incrementAndGet()));
+			}
+			y.set(startingTile.getY()); //resetter y-verdi
+			//går opp
+			while (isNotBorder(game,x.get(),y.get()-1)) {
+				surroundingTiles.add(game.getTile(x.get(), y.decrementAndGet()));
+			}
+			y.set(startingTile.getY());
+		}
+		x.set(startingTile.getX());
+		//Går opp
+		while (isNotBorder(game,x.get(),y.get()-1)) { 
+			surroundingTiles.add(game.getTile(x.get(), y.decrementAndGet()));
+			//går mot høyre
+			while (isNotBorder(game,x.get()+1,y.get())) {
+				surroundingTiles.add(game.getTile(x.incrementAndGet(), y.get()));
+			}
+			x.set(startingTile.getX()); //resetter x-verdi
+			//går mot venstre
+			while (isNotBorder(game,x.get()-1,y.get())) {
+				surroundingTiles.add(game.getTile(x.decrementAndGet(), y.get()));
+			}
+			x.set(startingTile.getX());
+		}
+		y.set(startingTile.getY());
+		//går ned
+		while (isNotBorder(game,x.get(),y.get()+1)) {
+			surroundingTiles.add(game.getTile(x.get(), y.incrementAndGet()));
+			//går mot høyre
+			while (isNotBorder(game,x.get()+1,y.get())) {
+				surroundingTiles.add(game.getTile(x.incrementAndGet(), y.get()));
+			}
+			x.set(startingTile.getX()); //resetter y-verdi
+			//går mot venstre
+			while (isNotBorder(game,x.get()-1,y.get())) {
+				surroundingTiles.add(game.getTile(x.decrementAndGet(), y.get()));
+			}
+			x.set(startingTile.getX());
+		}
+		y.set(startingTile.getY());
+		return surroundingTiles;
+	}
+	private static boolean isNotBorder(Game game, int x, int y) {
+		return game.isTile(x, y) && "0@=".indexOf(game.getTile(x, y).getType())==-1;
+	}
 	private static boolean checkBlackWhite(Game game) {
 		if (game.getRuleList().get(0)==false) { //hvis gamet ikke inneholder svarte/hvite ruter, skal metoden returnere true med en gang
 			return true;

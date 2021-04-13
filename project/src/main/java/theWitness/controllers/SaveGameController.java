@@ -2,6 +2,7 @@ package theWitness.controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,7 +96,7 @@ public class SaveGameController {
 	}
 	
 	@FXML
-	public void handleCreateAndSave() {
+	public void handleCreateAndSave() throws URISyntaxException {
 		try {
 			System.out.println(toSave.getIsGamesWon());
     		saveHandler.save(fileName.getText(), toSave);
@@ -108,7 +109,7 @@ public class SaveGameController {
 	}
 	
 	@FXML 
-	public void handleLoad(MouseEvent event) throws IOException {
+	public void handleLoad(MouseEvent event) throws IOException, URISyntaxException {
 		try {
 			toSave=saveHandler.load(fileName.getText());
 			handleOpenGameView(event);

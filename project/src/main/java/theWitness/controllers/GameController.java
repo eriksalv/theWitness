@@ -49,16 +49,7 @@ public class GameController {
 	
 	@FXML
 	private void initialize() throws FileNotFoundException {
-//		Game game1 = new Game(6,6);
-//		games = new GameCollection("games",new Game(5,5), new Game(10,10));
-//		games.addGame(game1);
-		GameCollection newGame = new GameCollection("new game");
-		List<LevelEnumerator> levelList = Arrays.asList(LevelEnumerator.values());
-		System.out.println(levelList);
-		for (int i=2;i<levelList.size();i++) {
-			newGame.addGame(levelList.get(i).startingTiles(), i-1);
-		}
-		initData(newGame); //default games dersom initData ikke blir kalt utenfra 
+		initData(GameCollection.newGame()); //default games dersom initData ikke blir kalt utenfra 
 	}
 	
 	public void initData(GameCollection games) {
@@ -195,7 +186,7 @@ public class GameController {
 		}
 	}
 	@FXML
-	public void keyListener(KeyEvent e) {
+	public void keyListener(KeyEvent e) { //håndterer tasteklikk
 		if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
 			handleUp();
 		}
@@ -241,23 +232,39 @@ public class GameController {
 	}
 	@FXML
 	public void handleUp() {
-		game.moveUp();
-		drawBoard();
+		try {
+			game.moveUp();
+			drawBoard();
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	@FXML
 	public void handleDown() {
-		game.moveDown();
-		drawBoard();
+		try {
+			game.moveDown();
+			drawBoard();
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	@FXML
 	public void handleLeft() {
-		game.moveLeft();
-		drawBoard();
+		try {
+			game.moveLeft();
+			drawBoard();
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	@FXML
 	public void handleRight() {
-		game.moveRight();
-		drawBoard();
+		try {
+			game.moveRight();
+			drawBoard();
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	@FXML
 	public void handleReset() {

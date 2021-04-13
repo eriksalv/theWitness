@@ -1,5 +1,6 @@
 package theWitness;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +28,19 @@ public class GameCollection {
 		});
 		this.games.values().forEach(game -> game.addGameCollection(this)); //legger til denne GameCollection i hvert game sin GameCollection-liste
 		this.name=name;
+	}
+	
+	public static final GameCollection newGame() { //lager en ny gamecollection som består av de standard uendra nivåene i config mappa.
+		GameCollection newGame = new GameCollection("new game");
+		List<LevelEnumerator> levelList = Arrays.asList(LevelEnumerator.values());
+		for (int i=2;i<levelList.size();i++) {
+			try {
+				newGame.addGame(levelList.get(i).startingTiles(), i-1);
+			} catch (FileNotFoundException e) {
+				System.err.println("Config files not found");
+			}
+		}
+		return newGame;
 	}
 	
 	public int getGameIndex() {
