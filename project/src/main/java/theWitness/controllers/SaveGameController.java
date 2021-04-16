@@ -36,6 +36,7 @@ public class SaveGameController {
 	@FXML private Label returnToGameView;
 	@FXML private Label returnToMainView;
 	@FXML private Label header;
+	@FXML private Label fileNotFoundMessage;
 	@FXML private Button createAndSave;
 	@FXML private Button load;
 	
@@ -47,7 +48,7 @@ public class SaveGameController {
 		isLoad=false;
 	}
 	
-	public void setLoad() {
+	public void setLoad() { //endrer gui til å vise knapper og felt for å laste fil i stedet for å lagre
 		isLoad=true;
 		header.setText("Load save file");
 		createAndSave.setVisible(false);
@@ -101,9 +102,9 @@ public class SaveGameController {
 			System.out.println(toSave.getIsGamesWon());
     		saveHandler.save(fileName.getText(), toSave);
     		saveMessage.setVisible(true);
-    		//fileNotFoundMessage.setVisible(false);
+    		fileNotFoundMessage.setVisible(false);
     	} catch (FileNotFoundException e) {
-    		//fileNotFoundMessage.setVisible(true);
+    		fileNotFoundMessage.setVisible(true);
     		System.out.println("file not found");
     	}
 	}
@@ -113,7 +114,9 @@ public class SaveGameController {
 		try {
 			toSave=saveHandler.load(fileName.getText());
 			handleOpenGameView(event);
+			fileNotFoundMessage.setVisible(false);
 		} catch (FileNotFoundException e) {
+			fileNotFoundMessage.setVisible(true);
 			System.out.println("file not found");
 		}
 	}

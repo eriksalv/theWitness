@@ -2,6 +2,8 @@ package kodenotter;
 
 public class PrimeChecker {
 	
+	public static int i;
+	
 	static boolean isPrime(int number) {
 		if (number>1) { //1 er ikke primtall
 			for (int i=2;i<number;i++) { //Skjekker delelighet med alle tall fra 2 til input tallet
@@ -20,5 +22,6 @@ public class PrimeChecker {
 		System.out.println(isPrime(4));
 		System.out.println(isPrime(5));
 		System.out.println(isPrime(19));
+		System.out.println(i);
 	}
 }

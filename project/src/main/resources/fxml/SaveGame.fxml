@@ -23,6 +23,7 @@
             </DialogPane>
             <Label fx:id="returnToGameView" layoutX="452.0" layoutY="14.0" onMouseClicked="#handleOpenGameView" text="❌" />
             <Label fx:id="returnToMainView" layoutX="452.0" layoutY="14.0" onMouseClicked="#returnToMainView" text="❌" visible="false" />
+            <Label fx:id="fileNotFoundMessage" visible="false" layoutX="67.0" layoutY="122.0" text="File not found" textFill="RED" />
          </children>
       </Pane>
    </children>

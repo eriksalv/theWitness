@@ -2,6 +2,9 @@ package theWitness;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -9,16 +12,17 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 	
 	EMPTY, INTEGRATIONTEST, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10, LEVEL_11, LEVEL_12, LEVEL_13, LEVEL_14, LEVEL_15;
 	
-	public final static String SAVE_FOLDER = "src/main/resources/config/";
+	//public final static String SAVE_FOLDER = "src/main/resources/config/";
+	public final static String SAVE_FOLDER = "config/";
 
 	@Override
-	public Game startingTiles() throws FileNotFoundException{ //gjør om gamecollection til ett game, siden det bare kan være 1 level i hver level-fil.
+	public Game startingTiles() throws FileNotFoundException, URISyntaxException{ //gjør om gamecollection til ett game, siden det bare kan være 1 level i hver level-fil.
 		//this.name() refererer til navnet på enum konstanten som startingTiles() blir kalt på. I config-mappen ligger det filer med samme navn + .level
 		return load(this.name() + ".level").getGames().get(1); 
 	}
 	
-	private static String getFilePath(String filename) {
-		return SAVE_FOLDER + filename + ".txt";
+	private static String getFilePath(String filename) throws URISyntaxException {
+		return (new SaveHandler()).getFilePathFromResource(SAVE_FOLDER).toString() + "\\" + filename + ".txt";
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 	}
 
 	@Override
-	public GameCollection load(String filename) throws FileNotFoundException {
+	public GameCollection load(String filename) throws FileNotFoundException, URISyntaxException {
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
 			int width = scanner.nextInt();
 			int height = scanner.nextInt();
@@ -44,7 +48,7 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 			return games;
 		}
 	}
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
 		System.out.println(INTEGRATIONTEST.startingTiles());
 		System.out.println(INTEGRATIONTEST.ordinal());
 		System.out.println(Arrays.asList(LevelEnumerator.values()));

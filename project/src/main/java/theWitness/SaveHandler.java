@@ -20,17 +20,20 @@ public class SaveHandler implements ISaveHandler {
 	//public final static String SAVE_FOLDER = "src/main/resources/saves/";
 	public final static String SAVE_FOLDER = "saves/";
 	
-	private Path getFilePathFromResource() throws URISyntaxException { //henter filer fra src/main/resources
+	protected Path getFilePathFromResource() throws URISyntaxException { //henter filer fra src/main/resources
+		return getFilePathFromResource(SAVE_FOLDER);
+
+	}
+	protected Path getFilePathFromResource(String filename) throws URISyntaxException {
 		ClassLoader classLoader = getClass().getClassLoader();
-	    URL resource = classLoader.getResource(SAVE_FOLDER);
+	    URL resource = classLoader.getResource(filename);
 	    if (resource == null) {
-	        throw new IllegalArgumentException("file not found! " + SAVE_FOLDER);
+	        throw new IllegalArgumentException("file not found! " + filename);
 	    } else {
 	    		// failed if files have whitespaces or special characters
 	            //return new File(resource.getFile());
           return (new File(resource.toURI())).toPath();
 	    }
-
 	}
 	public static final String[] getSaveFiles() throws URISyntaxException {
 		//File toList = new File(SAVE_FOLDER);

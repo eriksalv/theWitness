@@ -1,6 +1,7 @@
 package theWitness;
 
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class GameCollection {
 		for (int i=2;i<levelList.size();i++) {
 			try {
 				newGame.addGame(levelList.get(i).startingTiles(), i-1);
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException | URISyntaxException e) {
 				System.err.println("Config files not found");
 			}
 		}
