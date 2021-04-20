@@ -22,9 +22,8 @@ public class Game extends Grid {
 	
 	private GameCollection gameCollection;
 	
-//    private ArrayList<Tile> movedLine = new ArrayList<Tile>();
-//    private ArrayList<String> moveOrder = new ArrayList<String>();
-    private Map<Tile,String> moves = new LinkedHashMap<Tile,String>(); //map som har Tile som key, og trekket som førte til Tile som value.
+	//Bruker LinkedHashMap for å ta vare på rekkefølgen elementer blir satt inn, som er viktig for PathChecker-klassen
+    private Map<Tile,String> moves = new LinkedHashMap<Tile,String>(); 
     private boolean isGameWon;
     private boolean isCorrectPath;
     private boolean firstMove;
@@ -69,7 +68,7 @@ public class Game extends Grid {
 	public void setGameGoal() {
 		getTile(goal[0],goal[1]).setGoal();
 	}
-	public void setGameGoal(int x,int y) {
+	public void setGameGoal(int x,int y) { //game skal huske på hvor start- og goaltile er
 		if (!isTile(x,y)) {
 			throw new IllegalArgumentException("goal coordinates out of bounds");
 		}
@@ -130,7 +129,7 @@ public class Game extends Grid {
 			setRuleList(); // setter reglene for dette gamet
 			getStreamFromIterator().filter(tile -> tile.isStart()).forEach(tile -> {
 				tile.setMovedLine();
-				moves.put(tile, move);
+				moves.put(tile, move); //legger til en moveOrder for start-tile. Det er ikke så farlig at denne ikke er riktig, bare at den er der.
 			});
 			firstMove=false;
 		}
@@ -141,10 +140,11 @@ public class Game extends Grid {
 		List<Tile> movesList = new ArrayList<Tile>(moves.keySet());
 		int targetX = movesList.get(moves.size()-1).getX() + dx;
 		int targetY = movesList.get(moves.size()-1).getY() + dy;
-		Tile targetTile = getTile(targetX,targetY);
 		
 		//validerer trekket før det gjøres (store) endringer i tilstanden
-		validateMove(targetX, targetY, targetTile, true); 
+		validateMove(targetX, targetY, true); 
+		
+		Tile targetTile = getTile(targetX,targetY);
 		
 		if (movesList.size()>=2 && targetTile==movesList.get(movesList.size()-2)) { //Hvis man går tilbake
 			if (movesList.size()>=3) {
@@ -161,7 +161,9 @@ public class Game extends Grid {
 			if (targetTile.isGoal()) {
 				if (checkCorrectPath()) {
 					isGameWon=true;
-					gameCollection.gameStateChanged(this, isGameWon);
+					if (gameCollection!=null) {
+						gameCollection.gameStateChanged(this, isGameWon); //informerer gameCollection om at isGameWon er true
+					}
 				} else {
 					isGameOver=true;
 				}
@@ -219,9 +221,13 @@ public class Game extends Grid {
     public void setRuleList() {
     	if (getStreamFromIterator().anyMatch(tile -> tile.isBlack() || tile.isWhite())) {
     		ruleList.set(0, true);
+    	} else {
+    		ruleList.set(0, false);
     	}
     	if (getStreamFromIterator().anyMatch(tile -> tile.getContainsDot())) {
     		ruleList.set(1, true);
+    	} else {
+    		ruleList.set(1, false);
     	}
     	
     }
@@ -234,21 +240,24 @@ public class Game extends Grid {
     	return PathChecker.checkPath(this);    	
     }
     
-    private boolean validateMove(int x, int y, Tile targetTile, boolean throwException) {		
-		if (!isTile(x, y)) {
-			if (throwException) {
-				throw new IllegalArgumentException("Invalid move");
-			}
-			return false;
-		}
-		if (isGameWon) {
+    private boolean validateMove(int x, int y, boolean throwException) {
+    	if (isGameWon || isGameOver) {
 			if (throwException) {
 				throw new IllegalStateException("Game is already completed");
 			}
 			return false;
 		}
-		if (targetTile.hasCollision()) {
-			throw new IllegalArgumentException("Invalid move");
+    	else if (!isTile(x, y)) {
+			if (throwException) {
+				throw new IllegalStateException("Invalid move: coordinates out of bounds");
+			}
+			return false;
+		}
+    	else if (getTile(x,y).hasCollision()) {
+    		if (throwException) {
+    			throw new IllegalStateException("Invalid move: target tile has collision");
+    		}
+    		return false;
 		}
 		return true;
     }

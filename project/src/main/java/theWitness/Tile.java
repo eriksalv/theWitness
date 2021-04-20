@@ -42,6 +42,10 @@ public class Tile {
     	containsDot=true;
     }
     
+    public void removeDot() {
+    	containsDot=false;
+    }
+    
     public boolean getContainsDot() {
     	return containsDot;
     }
@@ -132,6 +136,9 @@ public class Tile {
 
     @Override
     public String toString() {
+    	if (getContainsDot()) {
+    		return ".";
+    	}
         return Character.toString(type);
     }
     

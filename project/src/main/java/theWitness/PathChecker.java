@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PathChecker {
+public final class PathChecker {
 		
 	public static final boolean checkPath(Game game) {
 		return checkBlackWhiteNew(game) && checkDots(game);
@@ -103,7 +103,7 @@ public class PathChecker {
 		y.set(startingTile.getY());
 		return surroundingTiles;
 	}
-	private static boolean isNotBorder(Game game, int x, int y) {
+	private static boolean isNotBorder(Game game, int x, int y) { //skjekker om en tile er en del av linjen som er tegnet
 		return game.isTile(x, y) && "0@=".indexOf(game.getTile(x, y).getType())==-1;
 	}
 	private static boolean checkBlackWhite(Game game) {
