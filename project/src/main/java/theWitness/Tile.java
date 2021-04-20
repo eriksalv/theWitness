@@ -7,12 +7,15 @@ public class Tile {
     private boolean containsDot;
 
     public Tile(int x, int y) {
+    	if (x<0 || y<0) {
+    		throw new IllegalArgumentException("coordinates must be non-negative");
+    	}
         this.x = x;
         this.y = y;
     }
     
     public void setType(char symbol) {
-    	if ("|-=0#<>S@_.".indexOf(symbol) == -1) {
+    	if ("|-=0#<>S@_.".indexOf(symbol) == -1) { //Dersom symbolet er en ugyldig type, kastes IllegalArgument
     		throw new IllegalArgumentException("Not a valid tile-type");
     	}
     	else if (symbol=='.') {
@@ -80,7 +83,7 @@ public class Tile {
     }
 
     public boolean isLine() {
-        return type == '|';
+        return type == '|' || type == '-';
     }
 
     public boolean isMovedLine() {

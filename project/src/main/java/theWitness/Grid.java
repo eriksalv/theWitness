@@ -15,6 +15,9 @@ public class Grid implements Iterable<Tile>{
 	private List<List<Tile>> grid;	
 	
 	public Grid(int width, int height) {
+		if (width<=0 || height<=0) {
+			throw new IllegalArgumentException("grid must have positive height and width");
+		}
 		this.height = height;
 		this.width = width;
 		
@@ -74,7 +77,7 @@ public class Grid implements Iterable<Tile>{
         			throw new NoSuchElementException("There is no next element");
         		}
             	while (!getTile(xIndex, yIndex).equals(getTile(getWidth()-1, yIndex))) {
-        			return getTile(xIndex++, yIndex); //inkrementerer xIndex så lenge den ikke er på den siste raden i grid
+        			return getTile(xIndex++, yIndex); //inkrementerer xIndex så lenge iterator ikke er på den siste raden i grid
         		}
         		int reset = xIndex; //når xIndex kommer til den siste raden i grid, skal den resettes til 0, mens yIndex økes med 1
         		xIndex=0;
@@ -110,7 +113,7 @@ public class Grid implements Iterable<Tile>{
 	}
 	
 	public static void main(String[] args) {
-		Game game = new Game(7, 7);
+		Game game = new Game(5, 5);
 		System.out.println(game);
 		System.out.println(game.getTile(0, 0));
 	}
