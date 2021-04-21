@@ -1,8 +1,11 @@
 package theWitness;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,10 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class PathChecker {
 		
 	public static final boolean checkPath(Game game) {
-		return checkBlackWhiteNew(game) && checkDots(game);
+		return checkBlackWhite(game) && checkDots(game);
 	}
 	
-	private static boolean checkDots(Game game) {
+	public static final boolean checkDots(Game game) {
 		//hvis en vanlig linje inneholder en dot, betyr det at man ikke har beveget seg gjennom den.
 		if (game.getStreamFromIterator().anyMatch(tile -> tile.getContainsDot() && tile.isLine())) { 
 			return false;
@@ -21,25 +24,41 @@ public final class PathChecker {
 		return true;
 	}
 	
-	private static boolean checkBlackWhiteNew(Game game) {
-		AtomicBoolean gameWon = new AtomicBoolean(true); //wrapper klasse for å endre verdi i lambda uttrykk
-		game.getStreamFromIterator().filter(tile -> tile.isBlack() || tile.isWhite()).forEach(tile -> {
+	public static final boolean checkBlackWhite(Game game) {
+		LinkedHashMap<Tile,Set<Tile>> surroundingTilesList = new LinkedHashMap<Tile,Set<Tile>>();
+		boolean gameWon = true; 
+		
+		game.getStreamFromIterator().filter(tile -> tile.isBlack() || tile.isWhite()).forEach(tile -> { //for hver tile som er svart/hvit:
 			Tile startingTile = game.getTile(tile.getX(), tile.getY());
 			Set<Tile> surroundingTiles = findSurroundingTiles(game,startingTile);
-			surroundingTiles.add(startingTile);
-			if (surroundingTiles.stream().anyMatch(t -> t.isBlack()) && surroundingTiles.stream().anyMatch(t -> t.isWhite())) {
-				gameWon.set(false); //dersom det både er anymatch for både black og white i samme område settes gameWon til false
-			}
-			System.out.println(surroundingTiles);
+			surroundingTilesList.put(startingTile,surroundingTiles);
 		});
-		return gameWon.get();
+		
+		for (int i=0;i<surroundingTilesList.size()-1;i++) { //skjekker at surroundingtiles-settene til de hvite og svarte tilene er disjunkte
+			for (int j=0;j<surroundingTilesList.size();j++) {
+				if (i==j || //skal ikke sammenligne et set med seg selv
+						(isSameColor(new ArrayList<Tile>(surroundingTilesList.keySet()).get(i),
+								new ArrayList<Tile>(surroundingTilesList.keySet()).get(j)))) //skal heller ikke sammenligne to set med samme start-tile farge
+				{
+					continue;
+				}
+				else if (!Collections.disjoint(new ArrayList<Set<Tile>>(surroundingTilesList.values()).get(i),
+						new ArrayList<Set<Tile>>(surroundingTilesList.values()).get(j))) 
+				{
+					gameWon=false; //hvis det finnes to set med forskjellig farge på start-tile, som ikke er disjunkte, er spillet ikke vunnet
+				}
+			}
+		}
+		return gameWon;
 	}
 	
-	private static Set<Tile> findSurroundingTiles(Game game, Tile startingTile) { //veldig treg algoritme, men den funker.. :)
+	//finner alle tiles fra startingTile som ikke er avskilt av en movedLine eller andre kanter
+	public static final Set<Tile> findSurroundingTiles(Game game, Tile startingTile) {
 		
 		AtomicInteger x = new AtomicInteger(startingTile.getX());
 		AtomicInteger y = new AtomicInteger(startingTile.getY());
 		Set<Tile> surroundingTiles = new HashSet<Tile>();
+		surroundingTiles.add(startingTile);
 		
 		//Går mot høyre
 		while (isNotBorder(game,x.get()+1,y.get())) { 
@@ -103,128 +122,13 @@ public final class PathChecker {
 		y.set(startingTile.getY());
 		return surroundingTiles;
 	}
-	private static boolean isNotBorder(Game game, int x, int y) { //skjekker om en tile er en del av linjen som er tegnet
+	public static final boolean isNotBorder(Game game, int x, int y) { //skjekker om en tile er en del av linjen som er tegnet
 		return game.isTile(x, y) && "0@=".indexOf(game.getTile(x, y).getType())==-1;
 	}
-	private static boolean checkBlackWhite(Game game) {
-		if (game.getRuleList().get(0)==false) { //hvis gamet ikke inneholder svarte/hvite ruter, skal metoden returnere true med en gang
-			return true;
-		}
-		List<Tile> movedLine = new ArrayList<Tile>(game.getMoves().keySet());
-    	List<String> moveOrder = new ArrayList<String>(game.getMoves().values());
-    	System.out.println(movedLine);
-    	System.out.println(moveOrder);
-    	    	
-    	HashSet<Character> sector1 = new HashSet<Character>();
-    	HashSet<Character> sector2 = new HashSet<Character>();
-    	
-    	for (int i=1;i<movedLine.size();i++) {
-    		if (moveOrder.get(i).equals("Up")) {
-    			AtomicInteger nextX1 = new AtomicInteger(movedLine.get(i).getX()-1);
-    			AtomicInteger nextX2 = new AtomicInteger(movedLine.get(i).getX()+1);
-    			AtomicInteger nextY1 = new AtomicInteger(movedLine.get(i).getY());
-    			AtomicInteger nextY2 = new AtomicInteger(movedLine.get(i).getY());
-    			Tile nextTile1 = new Tile(nextX1.get(), nextY1.get());
-    			Tile nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			
-    			while (game.isTile(nextTile1.getX(),nextTile1.getY()) && !game.getTile(nextTile1.getX(),nextTile1.getY()).isMovedLine()) {
-    				//System.out.println(nextTile1.getX() + ", " + nextTile1.getY());
-    				if (game.getTile(nextTile1.getX(),nextTile1.getY()).isBlack() || game.getTile(nextTile1.getX(),nextTile1.getY()).isWhite()) {
-    					sector1.add(game.getTile(nextTile1.getX(),nextTile1.getY()).getType());
-    				}
-    				nextX1.getAndDecrement();
-    				nextTile1 = new Tile(nextX1.get(),nextY1.get());
-    			}
-    			while (game.isTile(nextTile2.getX(),nextTile2.getY()) && !game.getTile(nextTile2.getX(),nextTile2.getY()).isMovedLine()) {
-    				System.out.println(nextTile2.getX() + ", " + nextTile2.getY());
-    				if (game.getTile(nextTile2.getX(),nextTile2.getY()).isBlack() || game.getTile(nextTile2.getX(),nextTile2.getY()).isWhite()) {
-    					sector2.add(game.getTile(nextTile2.getX(),nextTile2.getY()).getType());
-    				}
-    				nextX2.getAndIncrement();
-    				nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			}
-    		}
-    		if (moveOrder.get(i).equals("Down")) {
-    			AtomicInteger nextX1 = new AtomicInteger(movedLine.get(i).getX()+1);
-    			AtomicInteger nextX2 = new AtomicInteger(movedLine.get(i).getX()-1);
-    			AtomicInteger nextY1 = new AtomicInteger(movedLine.get(i).getY());
-    			AtomicInteger nextY2 = new AtomicInteger(movedLine.get(i).getY());
-    			Tile nextTile1 = new Tile(nextX1.get(), nextY1.get());
-    			Tile nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			
-    			while (game.isTile(nextTile1.getX(),nextTile1.getY()) && !game.getTile(nextTile1.getX(),nextTile1.getY()).isMovedLine()) {
-    				//System.out.println(nextTile1.getX() + ", " + nextTile1.getY());
-    				if (game.getTile(nextTile1.getX(),nextTile1.getY()).isBlack() || game.getTile(nextTile1.getX(),nextTile1.getY()).isWhite()) {
-    					sector1.add(game.getTile(nextTile1.getX(),nextTile1.getY()).getType());
-    				}
-    				nextX1.getAndIncrement();
-    				nextTile1 = new Tile(nextX1.get(),nextY1.get());
-    			}
-    			while (game.isTile(nextTile2.getX(),nextTile2.getY()) && !game.getTile(nextTile2.getX(),nextTile2.getY()).isMovedLine()) {
-    				System.out.println(nextTile2.getX() + ", " + nextTile2.getY());
-    				if (game.getTile(nextTile2.getX(),nextTile2.getY()).isBlack() || game.getTile(nextTile2.getX(),nextTile2.getY()).isWhite()) {
-    					sector2.add(game.getTile(nextTile2.getX(),nextTile2.getY()).getType());
-    				}
-    				nextX2.getAndDecrement();
-    				nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			}
-    		}
-    		if (moveOrder.get(i).equals("Left")) {
-    			AtomicInteger nextX1 = new AtomicInteger(movedLine.get(i).getX());
-    			AtomicInteger nextX2 = new AtomicInteger(movedLine.get(i).getX());
-    			AtomicInteger nextY1 = new AtomicInteger(movedLine.get(i).getY()+1);
-    			AtomicInteger nextY2 = new AtomicInteger(movedLine.get(i).getY()-1);
-    			Tile nextTile1 = new Tile(nextX1.get(), nextY1.get());
-    			Tile nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			
-    			while (game.isTile(nextTile1.getX(),nextTile1.getY()) && !game.getTile(nextTile1.getX(),nextTile1.getY()).isMovedLine()) {
-    				//System.out.println(nextTile1.getX() + ", " + nextTile1.getY());
-    				if (game.getTile(nextTile1.getX(),nextTile1.getY()).isBlack() || game.getTile(nextTile1.getX(),nextTile1.getY()).isWhite()) {
-    					sector1.add(game.getTile(nextTile1.getX(),nextTile1.getY()).getType());
-    				}
-    				nextY1.getAndIncrement();
-    				nextTile1 = new Tile(nextX1.get(),nextY1.get());
-    			}
-    			while (game.isTile(nextTile2.getX(),nextTile2.getY()) && !game.getTile(nextTile2.getX(),nextTile2.getY()).isMovedLine()) {
-    				System.out.println(nextTile2.getX() + ", " + nextTile2.getY());
-    				if (game.getTile(nextTile2.getX(),nextTile2.getY()).isBlack() || game.getTile(nextTile2.getX(),nextTile2.getY()).isWhite()) {
-    					sector2.add(game.getTile(nextTile2.getX(),nextTile2.getY()).getType());
-    				}
-    				nextY2.getAndDecrement();
-    				nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			}
-    		}
-    		if (moveOrder.get(i).equals("Right")) { 
-    			AtomicInteger nextX1 = new AtomicInteger(movedLine.get(i).getX());
-    			AtomicInteger nextX2 = new AtomicInteger(movedLine.get(i).getX());
-    			AtomicInteger nextY1 = new AtomicInteger(movedLine.get(i).getY()-1);
-    			AtomicInteger nextY2 = new AtomicInteger(movedLine.get(i).getY()+1);
-    			Tile nextTile1 = new Tile(nextX1.get(), nextY1.get());
-    			Tile nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			
-    			while (game.isTile(nextTile1.getX(),nextTile1.getY()) && !game.getTile(nextTile1.getX(),nextTile1.getY()).isMovedLine()) {
-    				//System.out.println(nextTile1.getX() + ", " + nextTile1.getY());
-    				if (game.getTile(nextTile1.getX(),nextTile1.getY()).isBlack() || game.getTile(nextTile1.getX(),nextTile1.getY()).isWhite()) {
-    					sector1.add(game.getTile(nextTile1.getX(),nextTile1.getY()).getType());
-    				}
-    				nextY1.getAndDecrement();
-    				nextTile1 = new Tile(nextX1.get(),nextY1.get());
-    			}
-    			while (game.isTile(nextTile2.getX(),nextTile2.getY()) && !game.getTile(nextTile2.getX(),nextTile2.getY()).isMovedLine()) {
-    				System.out.println(nextTile2.getX() + ", " + nextTile2.getY());
-    				if (game.getTile(nextTile2.getX(),nextTile2.getY()).isBlack() || game.getTile(nextTile2.getX(),nextTile2.getY()).isWhite()) {
-    					sector2.add(game.getTile(nextTile2.getX(),nextTile2.getY()).getType());
-    				}
-    				nextY2.getAndIncrement();
-    				nextTile2 = new Tile(nextX2.get(),nextY2.get());
-    			}
-    		}
+	public static final boolean isSameColor(Tile tile1, Tile tile2) { //skjekker om to tiles har samme farge
+    	if ((tile1.isBlack() && tile2.isBlack()) || (tile1.isWhite() && tile2.isWhite())) {
+    		return true;
     	}
-    	System.out.println(sector1);
-    	System.out.println(sector2);
-    	if (sector1.size()>1 || sector2.size()>1 || sector1.size()+sector2.size()==1) { //hvis det er mer enn 1 element i hvert sektor-set betyr det at det er en hvit og en svart i en sektor
-    		return false;
-    	}
-    	return true;
-	}
+    	return false;
+    }
 }

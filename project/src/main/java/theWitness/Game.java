@@ -102,8 +102,8 @@ public class Game extends Grid {
 		this.gameCollection = gameCollection;
 	}
 	
-	public void removeGameCollection(GameCollection gameCollection) {
-		gameCollection=null;
+	public void removeGameCollection() {
+		this.gameCollection=null;
 	}
 	
 	public GameCollection getGameCollection() {

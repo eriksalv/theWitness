@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -45,11 +46,17 @@ public class GameController {
 	@FXML Label level;
 	@FXML Label hasNextGame;
 	@FXML Label hasPrevGame;
+	@FXML Label errorMsg;
+	@FXML Label deleteMsg;
 	//@FXML Text winText = new Text();
 	
 	@FXML
 	private void initialize() throws FileNotFoundException {
-		initData(GameCollection.newGame()); //default games dersom initData ikke blir kalt utenfra 
+		try { //default games dersom initData ikke blir kalt utenfra 
+			initData(GameCollection.newGame());
+		}  catch (FileNotFoundException | URISyntaxException e) {
+			System.err.println("Config files not found");
+		} 
 	}
 	
 	public void initData(GameCollection games) {
@@ -64,9 +71,11 @@ public class GameController {
 		this.gameIndex=games.getGameIndex();
 		if (gameIndex<10) {
 			board.getStyleClass().add("world1");
+			board.getStyleClass().remove("world2");
 		}
 		else {
 			board.getStyleClass().add("world2");
+			board.getStyleClass().remove("world1");
 		}
 	}
 	
@@ -88,6 +97,7 @@ public class GameController {
 	private void setInitialGameState() {
 		level.setText("Level " + gameIndex);
 		setNextPrevLevels();
+		errorMsg.setVisible(false);
 		
 		System.out.println(games.getIsGamesWon());
 		game = games.getGames().getOrDefault(gameIndex, null);
@@ -205,9 +215,10 @@ public class GameController {
 	}
 	@FXML
 	public void handleNextGame() {
+		deleteMsg.setVisible(false);
 		if (games.hasNextLevel(gameIndex)) { //Hvis isGameWon er true for gamet man er på
 			gameIndex++;
-			if (gameIndex==10) {
+			if (gameIndex>=10) {
 				board.getStyleClass().remove("wordl1");
 				board.getStyleClass().add("world2");
 			}
@@ -218,12 +229,13 @@ public class GameController {
 	}
 	@FXML
 	public void handlePrevGame() {
+		deleteMsg.setVisible(false);
 		if (games.hasPrevLevel(gameIndex)) {
 			gameIndex--;
 			System.out.println(gameIndex);
-			if (gameIndex==9) {
-				board.getStyleClass().remove("world2");
+			if (gameIndex<=9) {
 				board.getStyleClass().add("world1");
+				board.getStyleClass().remove("world2");
 			}
 			setInitialGameState();
 			createBoard();
@@ -273,6 +285,18 @@ public class GameController {
 		//}
 		setInitialGameState();
 		drawBoard();
+	}
+	@FXML
+	public void handleRemoveGame() {
+		try {
+			games.removeGame(gameIndex);
+			initData(games);
+			deleteMsg.setVisible(true);
+		} catch (IllegalStateException e) {
+			System.out.println(e.getMessage());
+			errorMsg.setVisible(true);
+			deleteMsg.setVisible(false);
+		}
 	}
 	@FXML
 	public void openSaveView(ActionEvent e) throws IOException { //åpner nytt vindu for lagring

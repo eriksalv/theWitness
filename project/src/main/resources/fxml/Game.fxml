@@ -79,6 +79,13 @@
                               <Font size="25.0" />
                            </font>
                         </Button>
+                        <Button layoutX="19.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#handleRemoveGame" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🗑">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="19.0" fx:id="errorMsg" visible="false" layoutY="102.0" text="Could not delete level" textFill="RED" />
+                        <Label layoutX="19.0" fx:id="deleteMsg" visible="false" layoutY="102.0" text="Level deleted" textFill="GREEN" />
                      </children>
                   </Pane>
                   <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
