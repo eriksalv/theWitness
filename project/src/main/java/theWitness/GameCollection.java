@@ -16,7 +16,7 @@ public class GameCollection {
 	private String name;
 	private Map<Integer,Game> games;
 	private Map<Integer,Boolean> isGamesWon;
-	public int levelCount = 1; //OBS: levelCount starter på 1.
+	private int levelCount = 1; //OBS: levelCount starter på 1.
 	
 	public GameCollection(String s, Game... games) { //tar inn et navn på collection og varargs for games i collection
 		this.games=new TreeMap<Integer,Game>(); //TreeMap for å bevare rekkefølge
