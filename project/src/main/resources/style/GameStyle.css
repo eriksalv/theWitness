@@ -1,8 +1,20 @@
 .root {
-	-fx-base:#001a66;
+	-fx-base:#9c7c07;
+	-fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #250066 0%, #00664d 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #250066, #00664d);
+}
+#game {
 }
 #board {
 	/*-fx-background-color:#001a66;*/
+}
+#controls {
+	-fx-background-color:linear-gradient(from 0% 50% to 0% 100%, #4b94e8 0%, #38f8ff 100%);
+	-fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
 }
 .world1 {
 	-fx-background-color:#3d3dd4;
@@ -11,7 +23,22 @@
 	-fx-background-color:lightgreen;
 }
 .button {
-    -fx-font: bold 20pt "Arial";
+    -fx-font: bold 20pt "Constantia";
+    -fx-background-color:#001a66;
+    -fx-text-fill: white;
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+}
+.button:hover {
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50% 50%, radius 100%, #ea7f4b, #c54e2c);
+}
+.button:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
 }
 .tile {
 	/*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);

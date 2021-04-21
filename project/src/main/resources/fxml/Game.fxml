@@ -5,93 +5,99 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="game" prefHeight="647.0" prefWidth="500.0" style="-fx-background-color: grey;" stylesheets="/style/GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.GameController">
+
+<HBox alignment="CENTER" stylesheets="/style/GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.GameController">
    <children>
-      <VBox alignment="CENTER" layoutX="10.0" prefHeight="639.0" prefWidth="480.0">
+      <AnchorPane fx:id="game" prefHeight="647.0" prefWidth="500.0">
          <children>
-            <Pane>
+            <VBox alignment="CENTER" layoutX="10.0" prefHeight="639.0" prefWidth="480.0">
                <children>
-                  <Label fx:id="hasNextGame" alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="461.0" layoutY="3.0" onMouseClicked="#handleNextGame" text="›" textFill="WHITE">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="level" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="194.0" layoutY="3.0" text="Level 1" textFill="WHITE">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="hasPrevGame" layoutX="9.0" layoutY="3.0" onMouseClicked="#handlePrevGame" text="‹" textFill="WHITE">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <GridPane prefHeight="600.0" prefWidth="480.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="464.0" minHeight="10.0" prefHeight="430.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="295.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Pane prefHeight="200.0" prefWidth="439.0" style="-fx-background-color: silver; -fx-border-color: black;" GridPane.rowIndex="1">
+                  <Pane>
                      <children>
-                     	 <Button layoutX="208.0" layoutY="14.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleUp" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠑">
+                        <Label fx:id="hasNextGame" alignment="TOP_RIGHT" contentDisplay="RIGHT" layoutX="461.0" layoutY="3.0" onMouseClicked="#handleNextGame" text="›" textFill="WHITE">
                            <font>
-                              <Font name="Arial" size="10.0" />
+                              <Font size="30.0" />
                            </font>
-                       </Button>
-                       <Button layoutX="208.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleDown" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠓">
+                        </Label>
+                        <Label fx:id="level" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="194.0" layoutY="3.0" text="Level 1" textFill="WHITE">
                            <font>
-                              <Font size="10.0" />
+                              <Font size="30.0" />
                            </font>
-                       </Button>
-                       <Button layoutX="144.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleLeft" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠐">
+                        </Label>
+                        <Label fx:id="hasPrevGame" layoutX="9.0" layoutY="3.0" onMouseClicked="#handlePrevGame" text="‹" textFill="WHITE">
                            <font>
-                              <Font size="10.0" />
+                              <Font size="30.0" />
                            </font>
-                       </Button>
-                       <Button layoutX="272.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleRight" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠒">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                     	 </Button>
-                     	 <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleReset" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Restart">
-                     	 	<font>
-                     	 		<Font size="10.0" />         
-                     	 	</font>
-                     	 </Button>
-                        <Button layoutX="393.0" layoutY="14.0" mnemonicParsing="false" onAction="#openSaveView" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Save">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Button>
-                        <Button layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#returnToMainView" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🏠">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Button>
-                        <Button layoutX="19.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#handleRemoveGame" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🗑">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Button>
-                        <Label layoutX="19.0" fx:id="errorMsg" visible="false" layoutY="102.0" text="Could not delete level" textFill="RED" />
-                        <Label layoutX="19.0" fx:id="deleteMsg" visible="false" layoutY="102.0" text="Level deleted" textFill="GREEN" />
+                        </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
+                  <GridPane prefHeight="600.0" prefWidth="480.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="464.0" minHeight="10.0" prefHeight="430.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="295.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Pane prefHeight="200.0" prefWidth="439.0" fx:id="controls" style="-fx-border-color: black;" GridPane.rowIndex="1">
+                           <children>
+                           	 <Button layoutX="208.0" layoutY="14.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleUp" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠑">
+                                 <font>
+                                    <Font name="Arial" size="10.0" />
+                                 </font>
+                             </Button>
+                             <Button layoutX="208.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleDown" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠓">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                             </Button>
+                             <Button layoutX="144.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleLeft" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠐">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                             </Button>
+                             <Button layoutX="272.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleRight" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠒">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                           	 </Button>
+                           	 <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleReset" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Restart">
+                           	 	<font>
+                           	 		<Font size="10.0" />         
+                           	 	</font>
+                           	 </Button>
+                              <Button layoutX="393.0" layoutY="14.0" mnemonicParsing="false" onAction="#openSaveView" onKeyPressed="#keyListener" prefHeight="32.0" prefWidth="73.0" style="-fx-font-size: 10;" text="Save">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="208.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#returnToMainView" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🏠">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="19.0" layoutY="122.0" mnemonicParsing="false" onKeyPressed="#keyListener" onMouseClicked="#handleRemoveGame" prefHeight="32.0" prefWidth="64.0" style="-fx-font-size: 10;" text="🗑">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="errorMsg" layoutX="19.0" layoutY="102.0" text="Could not delete level" textFill="RED" visible="false" />
+                              <Label fx:id="deleteMsg" layoutX="19.0" layoutY="102.0" text="Level deleted" textFill="GREEN" visible="false" />
+                           </children>
+                        </Pane>
+                        <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
+                     </children>
+                  </GridPane>
                </children>
-            </GridPane>
+            </VBox>
          </children>
-      </VBox>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</HBox>

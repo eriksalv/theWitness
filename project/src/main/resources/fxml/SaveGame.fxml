@@ -5,26 +5,31 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="saveGame" prefHeight="647.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.SaveGameController">
+<HBox alignment="TOP_CENTER" stylesheets="/style/MainStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.SaveGameController">
    <children>
-      <Pane fx:id="saves" prefHeight="600.0" prefWidth="480.0">
+      <AnchorPane fx:id="saveGame" prefHeight="647.0" prefWidth="500.0">
          <children>
-            <Label fx:id="header" layoutX="94.0" layoutY="31.0" style="-fx-font-size: 20;" text="Select a file to save your game to" />
-            <Label layoutX="67.0" layoutY="72.0" text="Filename:" />
-            <TextField fx:id="fileName" layoutX="67.0" layoutY="89.0" promptText="save_1" text="save_1" />
-            <Button fx:id="createAndSave" layoutX="255.0" layoutY="90.0" mnemonicParsing="false" onMouseClicked="#handleCreateAndSave" text="Create and Save" />
-            <Button fx:id="load" layoutX="255.0" layoutY="90.0" mnemonicParsing="false" onMouseClicked="#handleLoad" prefHeight="32.0" prefWidth="112.0" text="Load" visible="false" />
-            <DialogPane fx:id="saveMessage" contentText="File was saved" layoutX="181.0" layoutY="3.0" prefHeight="78.0" prefWidth="120.0" style="-fx-border-color: black;" visible="false">
-               <header>
-                  <Label fx:id="closeSaveMessage" alignment="TOP_RIGHT" onMouseClicked="#handleCloseSaveMessage" text="X " />
-               </header>
-            </DialogPane>
-            <Label fx:id="returnToGameView" layoutX="452.0" layoutY="14.0" onMouseClicked="#handleOpenGameView" text="❌" />
-            <Label fx:id="returnToMainView" layoutX="452.0" layoutY="14.0" onMouseClicked="#returnToMainView" text="❌" visible="false" />
-            <Label fx:id="fileNotFoundMessage" visible="false" layoutX="67.0" layoutY="122.0" text="File not found" textFill="RED" />
+            <Pane fx:id="saves" prefHeight="647.0" prefWidth="500.0">
+               <children>
+                  <Label fx:id="header" layoutX="94.0" layoutY="31.0" style="-fx-font-size: 20;" text="Select a file to save your game to" />
+                  <Label layoutX="92.0" layoutY="73.0" text="Filename:" />
+                  <TextField fx:id="fileName" layoutX="92.0" layoutY="89.0" prefHeight="25.0" prefWidth="292.0" promptText="save_1" text="save_1" />
+                  <Button fx:id="createAndSave" layoutX="91.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#handleCreateAndSave" text="Create and Save" />
+                  <Button fx:id="load" layoutX="91.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#handleLoad" prefHeight="25.0" prefWidth="112.0" text="Load" visible="false" />
+                  <DialogPane fx:id="saveMessage" contentText="File was saved" layoutX="181.0" layoutY="3.0" prefHeight="78.0" prefWidth="120.0" style="-fx-border-color: black;" visible="false">
+                     <header>
+                        <Label fx:id="closeSaveMessage" alignment="TOP_RIGHT" onMouseClicked="#handleCloseSaveMessage" text="X " />
+                     </header>
+                  </DialogPane>
+                  <Label fx:id="returnToGameView" layoutX="452.0" layoutY="14.0" onMouseClicked="#handleOpenGameView" text="❌" />
+                  <Label fx:id="returnToMainView" layoutX="452.0" layoutY="14.0" onMouseClicked="#returnToMainView" text="❌" visible="false" />
+                  <Label fx:id="fileNotFoundMessage" layoutX="93.0" layoutY="122.0" text="File not found" textFill="RED" visible="false" />
+               </children>
+            </Pane>
          </children>
-      </Pane>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</HBox>
