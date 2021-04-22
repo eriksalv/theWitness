@@ -27,12 +27,13 @@ public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 
 	@Override
 	public void save(String filename, GameCollection games) throws FileNotFoundException {
-		throw new UnsupportedOperationException(); //Det skal ikke være mulig å lagre et enkelt nivå
+		throw new UnsupportedOperationException(); //Det skal ikke være mulig å lagre nivåer til config mappa
 		
 	}
 
 	@Override
 	public GameCollection load(String filename) throws FileNotFoundException, URISyntaxException {
+		//NB: filene i config mappa bruker et helt annet format enn de i saves mappa
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
 			int width = scanner.nextInt();
 			int height = scanner.nextInt();

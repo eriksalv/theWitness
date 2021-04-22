@@ -30,14 +30,10 @@ public class SaveHandler implements ISaveHandler {
 	    if (resource == null) {
 	        throw new IllegalArgumentException("file not found! " + filename);
 	    } else {
-	    		// failed if files have whitespaces or special characters
-	            //return new File(resource.getFile());
           return (new File(resource.toURI())).toPath();
 	    }
 	}
 	public static final String[] getSaveFiles() throws URISyntaxException {
-		//File toList = new File(SAVE_FOLDER);
-		//File toList = SAVE_FOLDER.toFile();
 		File toList = (new SaveHandler()).getFilePathFromResource().toFile();
 		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
 	        @Override
@@ -49,8 +45,6 @@ public class SaveHandler implements ISaveHandler {
 	}	
 	public void save(String filename, GameCollection games) throws FileNotFoundException, URISyntaxException {
 		try (PrintWriter writer = new PrintWriter(getFilePath(filename))) {
-//			List<Integer> sortedGamesList = new ArrayList<Integer>(games.getIsGamesWon().keySet());
-//			Collections.sort(sortedGamesList);
 			games.getGames().keySet().forEach(level -> {
 				Game game = games.getGames().getOrDefault(level, null); //finner hvilket game som hører til hver level
 				writer.println(game.getWidth());

@@ -3,6 +3,7 @@ package theWitness.controllers;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.NoSuchElementException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -104,8 +105,9 @@ public class SaveGameController {
     		saveMessage.setVisible(true);
     		fileNotFoundMessage.setVisible(false);
     	} catch (FileNotFoundException e) {
+    		fileNotFoundMessage.setText("invalid filename");
     		fileNotFoundMessage.setVisible(true);
-    		System.out.println("file not found");
+    		System.out.println("invalid filename");
     	}
 	}
 	
@@ -116,8 +118,13 @@ public class SaveGameController {
 			handleOpenGameView(event);
 			fileNotFoundMessage.setVisible(false);
 		} catch (FileNotFoundException e) {
+			fileNotFoundMessage.setText("file not found");
 			fileNotFoundMessage.setVisible(true);
 			System.out.println("file not found");
+		} catch (NoSuchElementException e) {
+			fileNotFoundMessage.setText("invalid file");
+			fileNotFoundMessage.setVisible(true);
+			System.out.println("invalid file");
 		}
 	}
 	
