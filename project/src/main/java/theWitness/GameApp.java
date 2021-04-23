@@ -17,30 +17,7 @@ import javafx.stage.Stage;
 public class GameApp extends Application {
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-		
-		//Midlertidig!!!!!
-		
-//		FXMLLoader loader = new FXMLLoader();
-//		loader.setLocation(getClass().getResource("Game.fxml"));
-//		
-//		Parent parent = loader.load();
-//		
-//		GameController controller = loader.getController();
-//		controller.initData(new GameCollection("nice", new Game(5,5), new Game(8,8)));
-//	        
-//	    Scene tableViewScene = new Scene(parent);
-//	    primaryStage.setTitle("The Witness");
-//		
-//		primaryStage.getIcons().add(new Image("file:" + getFileFromResource("images/icon.jpg").getAbsolutePath()));
-//		Scene scene = new Scene(parent);
-//		scene.getStylesheets().add(getClass().getResource("GameStyle.css").toExternalForm());
-//		
-//		primaryStage.setScene(scene);
-//		primaryStage.show();
-		
-		///////////////////////////////////////
-		        
+	public void start(Stage primaryStage) throws Exception {		        
 		Parent parent = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
 		primaryStage.setTitle("The Witness");
 		

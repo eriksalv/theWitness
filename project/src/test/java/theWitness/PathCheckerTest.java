@@ -73,16 +73,16 @@ private Game game;
 				);		
 	}
 	@Test
-	public void testCheckBlackWhite() {
-		assertFalse(PathChecker.checkBlackWhite(game));
+	public void testCheckColorsSeparated() {
+		assertFalse(PathChecker.checkColorsSeparated(game));
 		game.moveUp();
 		game.moveUp();
 		game.moveRight();
-		assertFalse(PathChecker.checkBlackWhite(game));
+		assertFalse(PathChecker.checkColorsSeparated(game));
 		game.moveRight();
 		game.moveUp();
 		game.moveUp();
-		assertTrue(PathChecker.checkBlackWhite(game));
+		assertTrue(PathChecker.checkColorsSeparated(game));
 	}
 	@Test
 	public void testCheckPath() {

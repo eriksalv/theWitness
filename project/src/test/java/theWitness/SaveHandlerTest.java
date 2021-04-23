@@ -60,9 +60,9 @@ public class SaveHandlerTest {
 	@Test
 	public void testLoadInvalidFile() {
 		assertThrows(
-			NoSuchElementException.class, 
+			Exception.class, 
 			() -> game = saveHandler.load("invalid-save").getGames().get(1), 
-			"NoSuchElementException kastes når innholdet i save-fil er ugyldig"
+			"Exception kastes når innholdet i save-fil er ugyldig"
 		);
 	}
 	@Test

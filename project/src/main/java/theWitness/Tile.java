@@ -15,7 +15,7 @@ public class Tile {
     }
     
     public void setType(char symbol) {
-    	if ("|-=0#<>S@_.".indexOf(symbol) == -1) { //Dersom symbolet er en ugyldig type, kastes IllegalArgument
+    	if ("|-=0<>S@_.PC".indexOf(symbol) == -1) { //Dersom symbolet er en ugyldig type, kastes IllegalArgument
     		throw new IllegalArgumentException("Not a valid tile-type");
     	}
     	else if (symbol=='.') {
@@ -50,6 +50,10 @@ public class Tile {
     	return containsDot;
     }
     
+    public boolean getIsColored() {
+    	return isWhite() || isBlack() || isPink() || isCyan();
+    }
+    
     public char getType() {
     	return type;
     }
@@ -61,10 +65,6 @@ public class Tile {
     public void setLastMovedLine() {
     	type = '0';
     }
-
-    public void setBlock() {
-        type = '#';
-    }
     
     public void setWhite() {
     	type = '<';
@@ -72,6 +72,14 @@ public class Tile {
     
     public void setBlack() {
     	type = '>';
+    }
+    
+    public void setPink() {
+    	type='P';
+    }
+    
+    public void setCyan() {
+    	type='C';
     }
     
     public void setBlank() {
@@ -108,6 +116,14 @@ public class Tile {
     
     public boolean isBlack() {
     	return type == '>';
+    }
+    
+    public boolean isPink() {
+    	return type=='P';
+    }
+    
+    public boolean isCyan() {
+    	return type=='C';
     }
 
     public boolean isBlank() {

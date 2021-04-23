@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox alignment="CENTER" stylesheets="/style/GameStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="theWitness.controllers.GameController">
    <children>
       <AnchorPane fx:id="game" prefHeight="647.0" prefWidth="500.0">
@@ -46,7 +45,7 @@
                       <RowConstraints maxHeight="295.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Pane prefHeight="200.0" prefWidth="439.0" fx:id="controls" style="-fx-border-color: black;" GridPane.rowIndex="1">
+                        <Pane fx:id="controls" prefHeight="200.0" prefWidth="439.0" style="-fx-border-color: black;" GridPane.rowIndex="1">
                            <children>
                            	 <Button layoutX="208.0" layoutY="14.0" minWidth="34.0" mnemonicParsing="false" onAction="#handleUp" onKeyPressed="#keyListener" prefHeight="49.0" prefWidth="64.0" text="🠑">
                                  <font>
@@ -92,7 +91,8 @@
                               <Label fx:id="deleteMsg" layoutX="19.0" layoutY="102.0" text="Level deleted" textFill="GREEN" visible="false" />
                            </children>
                         </Pane>
-                        <Pane fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;" />
+                        <Pane  fx:id="board" prefHeight="400.0" prefWidth="400.0" style="-fx-overflow: hidden; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0); -fx-border-color: black;"/>
+                      
                      </children>
                   </GridPane>
                </children>

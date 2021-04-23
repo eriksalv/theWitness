@@ -10,7 +10,9 @@ import java.util.Scanner;
 
 public enum LevelEnumerator implements LevelSettings, ISaveHandler {
 	
-	EMPTY, INTEGRATIONTEST, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10, LEVEL_11, LEVEL_12, LEVEL_13, LEVEL_14, LEVEL_15;
+	EMPTY, INTEGRATIONTEST, LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6,
+	LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10, LEVEL_11, LEVEL_12, LEVEL_13, LEVEL_14,
+	LEVEL_15, LEVEL_16, LEVEL_17;
 	
 	//public final static String SAVE_FOLDER = "src/main/resources/config/";
 	public final static String SAVE_FOLDER = "config/";

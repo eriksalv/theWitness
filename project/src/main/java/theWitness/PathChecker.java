@@ -1,5 +1,7 @@
 package theWitness;
 
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class PathChecker {
 		
 	public static final boolean checkPath(Game game) {
-		return checkBlackWhite(game) && checkDots(game);
+		return checkColorsSeparated(game) && checkDots(game);
 	}
 	
 	public static final boolean checkDots(Game game) {
@@ -24,17 +26,17 @@ public final class PathChecker {
 		return true;
 	}
 	
-	public static final boolean checkBlackWhite(Game game) {
+	public static final boolean checkColorsSeparated(Game game) {
 		LinkedHashMap<Tile,Set<Tile>> surroundingTilesList = new LinkedHashMap<Tile,Set<Tile>>();
 		boolean gameWon = true; 
 		
-		game.getStreamFromIterator().filter(tile -> tile.isBlack() || tile.isWhite()).forEach(tile -> { //for hver tile som er svart/hvit:
+		game.getStreamFromIterator().filter(tile -> tile.getIsColored()).forEach(tile -> { //for hver tile som er svart/hvit:
 			Tile startingTile = game.getTile(tile.getX(), tile.getY());
 			Set<Tile> surroundingTiles = findSurroundingTiles(game,startingTile);
 			surroundingTilesList.put(startingTile,surroundingTiles);
 		});
 		
-		for (int i=0;i<surroundingTilesList.size()-1;i++) { //skjekker at surroundingtiles-settene til de hvite og svarte tilene er disjunkte
+		for (int i=0;i<surroundingTilesList.size()-1;i++) { //skjekker at surroundingtiles-settene til de fargede tilene er disjunkte
 			for (int j=0;j<surroundingTilesList.size();j++) {
 				if (i==j || //skal ikke sammenligne et set med seg selv
 						(isSameColor(new ArrayList<Tile>(surroundingTilesList.keySet()).get(i),
@@ -126,9 +128,37 @@ public final class PathChecker {
 		return game.isTile(x, y) && "0@=".indexOf(game.getTile(x, y).getType())==-1;
 	}
 	public static final boolean isSameColor(Tile tile1, Tile tile2) { //skjekker om to tiles har samme farge
-    	if ((tile1.isBlack() && tile2.isBlack()) || (tile1.isWhite() && tile2.isWhite())) {
+    	if ((tile1.isBlack() && tile2.isBlack()) || (tile1.isWhite() && tile2.isWhite()) || (tile1.isPink() && tile2.isPink()) || (tile1.isCyan() && tile2.isCyan())) {
     		return true;
     	}
     	return false;
     }
+	public static void main(String[] args) {
+		Game game = null;
+		try {
+			game=LevelEnumerator.LEVEL_16.startingTiles();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		checkColorsSeparated(game);
+		System.out.println(checkColorsSeparated(game));
+		game.moveUp();
+		game.moveUp();
+		game.moveRight();
+		game.moveRight();
+		game.moveUp();
+		game.moveUp();
+		game.moveLeft();
+		game.moveLeft();
+		game.moveUp();
+		game.moveUp();
+		game.moveRight();
+		game.moveRight();
+		checkColorsSeparated(game);
+		System.out.println(checkColorsSeparated(game));
+	}
 }

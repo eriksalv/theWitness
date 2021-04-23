@@ -1,5 +1,7 @@
 package theWitness;
 
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -113,7 +115,7 @@ public class Game extends Grid {
 	public void clear() {
 		getGrid()
 		.forEach(list -> list.stream()
-				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><_]")) //tile typer som ikke skal resettes
+				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><_PC]")) //tile typer som ikke skal resettes
 				.forEach(tile -> tile.setLine()));
 		isGameWon=false;
 		isCorrectPath=false;
@@ -219,7 +221,7 @@ public class Game extends Grid {
 	}*/
     
     public void setRuleList() {
-    	if (getStreamFromIterator().anyMatch(tile -> tile.isBlack() || tile.isWhite())) {
+    	if (getStreamFromIterator().anyMatch(tile -> tile.getIsColored())) {
     		ruleList.set(0, true);
     	} else {
     		ruleList.set(0, false);
@@ -272,26 +274,18 @@ public class Game extends Grid {
     }
 	
 	public static void main(String[] args) {
-		 Game game = new Game(5, 5);
-		 GameCollection games = new GameCollection("", game);
+		Game game = null;
+		 try {
+			game = LevelEnumerator.LEVEL_16.startingTiles();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 
-		 game.setGameStart(0, 2);
-		 game.setGameGoal(4,2);
-		 game.getTile(1, 1).setBlack();
-		 game.getTile(3, 1).setWhite();
-		 game.getTile(2, 2).setDot();
-		 
-		 System.out.println(game);
-		 
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveUp();
-		 game.moveUp();
-		 game.moveRight();
-		 game.moveRight();
-		 game.moveDown();
-		 game.moveDown();
-		 
+		System.out.println(game);
 //		 game.moveDown();
 //		 game.moveDown();
 //		 game.moveRight();
