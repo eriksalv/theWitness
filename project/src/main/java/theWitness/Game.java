@@ -24,7 +24,7 @@ public class Game extends Grid {
 	
 	private GameCollection gameCollection;
 	
-	//Bruker LinkedHashMap for å ta vare på rekkefølgen elementer blir satt inn, som er viktig for PathChecker-klassen
+	//Bruker LinkedHashMap for å ta vare på rekkefølgen elementer blir satt inn
     private Map<Tile,String> moves = new LinkedHashMap<Tile,String>(); 
     private boolean isGameWon;
     private boolean isCorrectPath;
