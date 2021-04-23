@@ -147,7 +147,7 @@ public class Tile {
     }
 
     public boolean hasCollision() {
-        return isMovedLine() || isBlock() || isBlank() || isWhite() || isBlack();
+        return isMovedLine() || isBlock() || isBlank() || getIsColored();
     }
 
     @Override
