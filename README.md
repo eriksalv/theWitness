@@ -34,9 +34,16 @@ Logikken i spillet er fordelt over 5 klasser: Tile.java, Grid.java, Game.java, P
 
 Denne klassen er den mest grunnleggende, og beskriver hver individuelle rute/tile i et brett/game. Feltene som beskriver tilstanden til en rute er:
 
-- Hva slags type ruten er (char type). Enkelte ruter skal ha kollisjon, som er gitt ved hasCollision()-metoden.
-- x- og y-koordinatene til ruten (int x,y).
+- Hva slags type ruten er **(char type)**. Enkelte ruter skal ha kollisjon, som er gitt ved hasCollision()-metoden.
+- x- og y-koordinatene til ruten **(int x, y)**.
 - Om ruten inneholder en prikk eller ikke (boolean containsDot).
 
+### Grid.java
 
+Grid beskriver kun tilstanden til et brett, og har ingen regler for hvordan spillet skal spilles. Dette gjør at denne klassen også kan brukes som en basis for andre rutenett-baserte spill. Tilstanden til Grid er gitt av følgende felter:
+
+- Bredde og høyde for brettet **(int width, height)**.
+- Todimensjonal liste over alle Tile objektene som Grid inneholder **(List<List<Tile>>)**.
+
+I tillegg implementerer klassen Iterable<Tile>, og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
 
