@@ -27,14 +27,12 @@ public class Game extends Grid {
 	//Bruker LinkedHashMap for å ta vare på rekkefølgen elementer blir satt inn
     private Map<Tile,String> moves = new LinkedHashMap<Tile,String>(); 
     private boolean isGameWon;
-    private boolean isCorrectPath;
     private boolean firstMove;
     private boolean isGameOver;
 	
 	public Game(int width, int height) {
 		super(width,height);
 		isGameWon=false;
-		isCorrectPath=false;
 		firstMove=true;
 		isGameOver=false;
 	}
@@ -118,7 +116,6 @@ public class Game extends Grid {
 				.filter(tile -> !Character.toString(tile.getType()).matches("[S@><_PC]")) //tile typer som ikke skal resettes
 				.forEach(tile -> tile.setLine()));
 		isGameWon=false;
-		isCorrectPath=false;
 		firstMove=true;
 		isGameOver=false;
 		moves.clear();
@@ -179,7 +176,6 @@ public class Game extends Grid {
 		}
 		if (isGameWon) {
 			movesList.forEach(tile -> tile.setMovedLine());
-			System.out.println(moves.values());
 		}
 	}
 

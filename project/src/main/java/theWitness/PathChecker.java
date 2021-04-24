@@ -15,7 +15,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class PathChecker {
 		
 	public static final boolean checkPath(Game game) {
-		return checkColorsSeparated(game) && checkDots(game);
+		List<Boolean> satisfiedRules = new ArrayList<Boolean>();
+		for (int i=0;i<game.getRuleList().size();i++) {
+			satisfiedRules.add(true);
+		}	
+		
+		if (game.getRuleList().get(0))
+			satisfiedRules.set(0, checkColorsSeparated(game));
+		if (game.getRuleList().get(1)) 
+			satisfiedRules.set(1, checkDots(game));	
+		
+		for (Boolean b : satisfiedRules) {
+			if (!b) 
+				return false;
+		}
+		return true;
 	}
 	
 	public static final boolean checkDots(Game game) {

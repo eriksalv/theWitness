@@ -79,6 +79,7 @@ public class SaveHandlerTest {
 		
 		try {
 			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave").replace("/C:", "")));
+			// ":" i "/C:" skaper problemer for nio path
 		} catch (IOException e) {
 			fail("Could not load test file");
 		}
