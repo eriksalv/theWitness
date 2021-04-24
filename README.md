@@ -64,3 +64,11 @@ PathChecker er en hjelpeklasse med kun static metoder, som skjekker om man har g
 
 Meningen med GameCollection-klassen, er i hovedsak å ha en samling av Game-objekter, som lett kan brukes av selve applikasjonen til å representere en samling av nivåer/levels som man går igjennom etter hverandre. I tillegg inneholder klassen en map over hvilke nivåer i samlingen som har blitt vunnet før, som brukes i appen til å kun tillate å gå til neste nivå dersom man har fullført det man er på. Man kan derfor si at GameCollection fungerer som en observatør av Game-objekter. GameCollection tillater i i tillegg å slette nivåer man har fullført, og å legge til nye nivåer/erstatte eksisterende nivåer (sistnevnte er ikke brukt i appen).
 
+# Filbehandling
+
+Grensesnittet ISaveHandler implementeres av to klasser, SaveHandler.java og LevelEnumerator.java, og viser til klasser som håndterer filer på en eller annen måte.
+
+### SaveHandler.java
+
+SaveHandler gir støtte for å lagre et GameCollection-objekt til en fil, og laste filen til et GameCollection-objekt. save-filene lagres i resources-mappen. En konsekvens av dette er at det ikke bør være mulig å lagre nye save-filer utover de som ligger i mappen fra før. SaveHandler inneholder også en metode **getFilePathFromResource(String filename)** som hovedsakelig brukes av andre klasser til å finne filstien til en gitt mappe i resources-mappen. Det er også en ubrukt metode i klassen, **getSaveFiles()**, som gir ut en liste av alle save-filene. Meningen bak metoden var å bruke den til å få de ulike filnavnene som knapper i grensesnittet, slik at man ikke trenger å skrive filnavnet inn for å lagre/laste, men jeg rakk ikke å implementere dette. 
+
