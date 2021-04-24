@@ -20,4 +20,8 @@ For å fullføre et brett med svarte og hvite ruter, må man "separere" de forsk
 
 ### Prikker
 
+Når det er prikker (dots) på et brett, må man gå igjennom alle prikkene på brettet før man når målet for å fullføre brettet.
+
 ### Flere farger
+
+Et brett som inneholder flere farger fungerer på akkurat samme måte som et brett med kun svarte å hvite ruter. Den eneste forskjellen er at det er flere farger som må separeres.
