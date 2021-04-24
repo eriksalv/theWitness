@@ -142,7 +142,8 @@ public final class PathChecker {
 		return game.isTile(x, y) && "0@=".indexOf(game.getTile(x, y).getType())==-1;
 	}
 	public static final boolean isSameColor(Tile tile1, Tile tile2) { //skjekker om to tiles har samme farge
-    	if ((tile1.isBlack() && tile2.isBlack()) || (tile1.isWhite() && tile2.isWhite()) || (tile1.isPink() && tile2.isPink()) || (tile1.isCyan() && tile2.isCyan())) {
+		//(tile1.isBlack() && tile2.isBlack()) || (tile1.isWhite() && tile2.isWhite()) || (tile1.isPink() && tile2.isPink()) || (tile1.isCyan() && tile2.isCyan())
+    	if ((tile1.getIsColored() && tile2.getIsColored()) && tile1.getType()==tile2.getType()) {
     		return true;
     	}
     	return false;
