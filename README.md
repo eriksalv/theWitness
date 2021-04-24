@@ -43,7 +43,20 @@ Denne klassen er den mest grunnleggende, og beskriver hver individuelle rute/til
 Grid beskriver kun tilstanden til et brett, og har ingen regler for hvordan spillet skal spilles. Dette gjør at denne klassen også kan brukes som en basis for andre rutenett-baserte spill. Tilstanden til Grid er gitt av følgende felter:
 
 - Bredde og høyde for brettet **(int width, height)**.
-- Todimensjonal liste over alle Tile objektene som Grid inneholder **(List\<List\<tile\>\>) grid)**.
+- Todimensjonal liste over alle Tile objektene som Grid inneholder **(List\<List\<Tile\>\>) grid)**.
 
-I tillegg implementerer klassen Iterable(Tile), og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
+I tillegg implementerer klassen Iterable\<Tile\>, og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
+
+### Game.java og PathChecker.java
+
+Game.java arver fra Grid.java, og beskriver hvordan spillet fungerer. I tillegg til tilstanden som arves fra Grid har Game en del ekstra felter, hvor de viktigste er:
+
+- **LinkedHashMap\<Tile,String\> moves** som inneholder rekkefølgen for trekkene man har tatt. Tile representerer hvilken rute som trekket førte til, og String refererer til hvilken retning som førte til korresponderende rute (Up, Down, Left, Right).
+- informasjon om spillet er vunnet **(boolean isGameWon)** eller tapt **(boolean isGameOver)**.
+- **int[] start** og **int[] goal** er start- og mål-koordinatene til et game. Trenger disse siden det bare er en enveisassosiasjon fra Grid til Tile, og at de kan bli overskrevet av andre ruter.
+
+PathChecker er en hjelpeklasse med kun static metoder, som skjekker om man har gått gjennom brettet på riktig måte (at alle reglene er oppfylt). Det er to hovedmetoder i klassen:
+
+- *checkDots(Game game)* som skjekker at man har gått igjennom alle prikkene. Dette kan lett skjekkes ved å gå igjennom brettet og skjekke om det finnes noen vanlige ruter (isLine()) som inneholder en prikk (getContainsDot()). 
+- Metoden **checkColorsSeparated(Game game)** er litt mer komplisert. For det første går finner den alle de fargede rutene på brettet, som sendes videre til en hjelpemetode  **findSurroundingTiles(Game game, Tile startingTile)** som tar utgangspunkt i koordinatene til den fargede ruten som sendes inn (startingTile) og går bruker fire while løkker til å bevege seg oppover, nedover, til venstre og til høyre helt fram til den neste ruten er en del av linjen man beveger (movedLine) eller til den når slutten av brettet. For hver rute som løkkene går igjennom kjøres det to while løkker til, som går i de to "motsatte" retningene av det den ytre while løkken går i. Alle tiles som løkkene går igjennom blir lagt til i et Set\<Tile\>, som til slutt utgjør hashmappet **LinkedHashMap\<Tile,Set\<Tile\>\> surroundingTilesList** med den hver fargede tile i brettet som en unik key, og surroundTiles-settet som tilhører ruten som value. Det eneste som gjenstår er å skjekke at    
 
