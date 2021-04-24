@@ -45,5 +45,5 @@ Grid beskriver kun tilstanden til et brett, og har ingen regler for hvordan spil
 - Bredde og høyde for brettet **(int width, height)**.
 - Todimensjonal liste over alle Tile objektene som Grid inneholder **(List<List<tile>> grid)**.
 
-I tillegg implementerer klassen Iterable<tile>, og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
+I tillegg implementerer klassen Iterable</tile>, og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
 
