@@ -43,7 +43,7 @@ Denne klassen er den mest grunnleggende, og beskriver hver individuelle rute/til
 Grid beskriver kun tilstanden til et brett, og har ingen regler for hvordan spillet skal spilles. Dette gjør at denne klassen også kan brukes som en basis for andre rutenett-baserte spill. Tilstanden til Grid er gitt av følgende felter:
 
 - Bredde og høyde for brettet **(int width, height)**.
-- Todimensjonal liste over alle Tile objektene som Grid inneholder **(List<List<Tile>>)**.
+- Todimensjonal liste over alle Tile objektene som Grid inneholder **(List<List<Tile>> grid)**.
 
 I tillegg implementerer klassen Iterable<Tile>, og har en implementasjon av iterator() som går igjennom hvert Tile objekt i Grid rad for rad.
 
