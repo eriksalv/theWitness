@@ -34,9 +34,7 @@ public class GameApp extends Application {
 	    if (resource == null) {
 	        throw new IllegalArgumentException("file not found! " + fileName);
 	    } else {
-	    		// failed if files have whitespaces or special characters
-	            //return new File(resource.getFile());
-          return new File(resource.toURI());
+	    	return new File(resource.toURI());
 	    }
 
 	}

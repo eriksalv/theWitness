@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class GameCollection {	
 	private String name;
-	private Map<Integer,Game> games;
+	private Map<Integer,Game> games; //Integer representerer nivået til Game-objektet
 	private Map<Integer,Boolean> isGamesWon;
 	private int levelCount = 1; //OBS: levelCount starter på 1.
 	

@@ -34,6 +34,7 @@ public class SaveHandler implements ISaveHandler {
           return (new File(resource.toURI())).toPath();
 	    }
 	}
+	//Ikke brukt
 	public static final String[] getSaveFiles() throws URISyntaxException {
 		File toList = (new SaveHandler()).getFilePathFromResource().toFile();
 		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
