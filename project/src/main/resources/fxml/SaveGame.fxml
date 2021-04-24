@@ -16,8 +16,8 @@
                <children>
                   <Label fx:id="header" layoutX="94.0" layoutY="31.0" style="-fx-font-size: 20;" text="Select a file to save your game to" />
                   <Label layoutX="92.0" layoutY="73.0" text="Filename:" />
-                  <TextField fx:id="fileName" layoutX="92.0" layoutY="89.0" prefHeight="25.0" prefWidth="292.0" promptText="save_1" text="save_1" />
-                  <Button fx:id="createAndSave" layoutX="91.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#handleCreateAndSave" text="Create and Save" />
+                  <TextField fx:id="fileName" layoutX="92.0" layoutY="89.0" prefHeight="25.0" prefWidth="292.0" promptText="save1" text="save1" />
+                  <Button fx:id="save" layoutX="91.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#handleSave" text="Save" />
                   <Button fx:id="load" layoutX="91.0" layoutY="139.0" mnemonicParsing="false" onMouseClicked="#handleLoad" prefHeight="25.0" prefWidth="112.0" text="Load" visible="false" />
                   <DialogPane fx:id="saveMessage" contentText="File was saved" layoutX="181.0" layoutY="3.0" prefHeight="78.0" prefWidth="120.0" style="-fx-border-color: black;" visible="false">
                      <header>

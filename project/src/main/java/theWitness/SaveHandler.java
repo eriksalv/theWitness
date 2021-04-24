@@ -2,6 +2,7 @@ package theWitness;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
@@ -43,8 +44,10 @@ public class SaveHandler implements ISaveHandler {
 	    };
 		return toList.list(filter);
 	}	
-	public void save(String filename, GameCollection games) throws FileNotFoundException, URISyntaxException {
-		try (PrintWriter writer = new PrintWriter(getFilePath(filename))) {
+	public void save(String filename, GameCollection games) throws FileNotFoundException {
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(getFilePath(filename)))) {
+			//new FileOutputStream(getClass().getResource("/" + SAVE_FOLDER + filename + ".txt").getPath()))
+			//getFilePath(filename)
 			games.getGames().keySet().forEach(level -> {
 				Game game = games.getGames().getOrDefault(level, null); //finner hvilket game som hører til hver level
 				writer.println(game.getWidth());
@@ -67,7 +70,7 @@ public class SaveHandler implements ISaveHandler {
 
 	}
 	
-	public GameCollection load(String filename) throws FileNotFoundException, URISyntaxException {
+	public GameCollection load(String filename) throws FileNotFoundException {
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
 			GameCollection games = new GameCollection(filename);
 			while (scanner.hasNext()) {
@@ -104,8 +107,8 @@ public class SaveHandler implements ISaveHandler {
 
 	}
 
-	public static final String getFilePath(String filename) throws URISyntaxException {
-		return (new SaveHandler()).getFilePathFromResource().toString() + "\\" + filename + ".txt";
+	public String getFilePath(String filename) throws FileNotFoundException {
+		return getClass().getResource("/" + SAVE_FOLDER + filename + ".txt").getPath();
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
@@ -119,7 +122,6 @@ public class SaveHandler implements ISaveHandler {
 //		SaveHandler s = new SaveHandler();
 //		System.out.println(s.load("save_1").getIsGamesWon());
 //		System.out.println(s.load("save_1").getGames());
-		System.out.println(getFilePath("level15"));
 	}
 
 }

@@ -2,7 +2,9 @@ package theWitness;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,8 +41,8 @@ public class SaveHandlerTest {
 	public void testLoad() {
 		GameCollection savedNewGame; 
 		try {
-			savedNewGame = saveHandler.load("test-save");
-		} catch (FileNotFoundException | URISyntaxException e) {
+			savedNewGame = saveHandler.load("testsave");
+		} catch (FileNotFoundException e) {
 			fail("Could not load saved file");
 			return;
 		}
@@ -52,9 +54,9 @@ public class SaveHandlerTest {
 	@Test
 	public void testLoadNonExistingFile() {
 		assertThrows(
-			FileNotFoundException.class, 
+			NullPointerException.class, 
 			() -> game = saveHandler.load("foo").getGames().get(1), 
-			"FileNotFoundException kastes når filen ikke eksisterer"
+			"NullPointerException kastes når filen ikke eksisterer"
 		);
 	}
 	@Test
@@ -68,22 +70,22 @@ public class SaveHandlerTest {
 	@Test
 	public void testSave() {
 		try {
-			saveHandler.save("test-save-new", new GameCollection("save-test",game));
-		} catch (FileNotFoundException | URISyntaxException e) {
+			saveHandler.save("testsavenew", new GameCollection("save-test",game));
+		} catch (FileNotFoundException e) {
 			fail("Could not save file");
 		}
 		
 		byte[] testFile = null, newFile = null;
 		
 		try {
-			testFile = Files.readAllBytes(Path.of(SaveHandler.getFilePath("test-save")));
-		} catch (IOException | URISyntaxException e) {
+			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave").replace("/C:", "")));
+		} catch (IOException e) {
 			fail("Could not load test file");
 		}
 
 		try {
-			newFile = Files.readAllBytes(Path.of(SaveHandler.getFilePath("test-save-new")));
-		} catch (IOException | URISyntaxException e) {
+			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew").replace("/C:", "")));
+		} catch (IOException e) {
 			fail("Could not load saved file");
 		}
 		assertNotNull(testFile);
@@ -92,17 +94,18 @@ public class SaveHandlerTest {
 
 	}
 	@Test
-	public void testSaveInvalidFile() {
+	public void testSaveToNonExistingFile() {
 		assertThrows(
-				FileNotFoundException.class,
-				() -> saveHandler.save("|", new GameCollection("invalid filename test", game)),
-				"FileNotFound skal kastes når man prøver å lagre spillet til en fil med ugyldig filnavn"
+				NullPointerException.class,
+				() -> saveHandler.save("foo", new GameCollection("file does not exists", game)),
+				"NullPointerException skal kastes når man prøver å lagre spillet til en fil som ikke eksisterer"
 				);
 	}
 	@AfterAll
-	static void teardown() throws URISyntaxException {
-		File newTestSaveFile = new File(SaveHandler.getFilePath("test-save-new"));
-		newTestSaveFile.delete();
+	static void teardown() throws IOException, URISyntaxException {
+		PrintWriter newTestSaveFile = new PrintWriter(new SaveHandler().getFilePath("testsavenew"));
+		newTestSaveFile.print(""); //fjerner alt innhold i testsavenew
+		newTestSaveFile.close();
 	}
 	
 }

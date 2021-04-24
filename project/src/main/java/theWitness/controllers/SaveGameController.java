@@ -3,6 +3,7 @@ package theWitness.controllers;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.InvalidPathException;
 import java.util.NoSuchElementException;
 
 import javafx.event.ActionEvent;
@@ -38,7 +39,7 @@ public class SaveGameController {
 	@FXML private Label returnToMainView;
 	@FXML private Label header;
 	@FXML private Label fileNotFoundMessage;
-	@FXML private Button createAndSave;
+	@FXML private Button save;
 	@FXML private Button load;
 	
 	private GameCollection toSave;
@@ -52,7 +53,7 @@ public class SaveGameController {
 	public void setLoad() { //endrer gui til å vise knapper og felt for å laste fil i stedet for å lagre
 		isLoad=true;
 		header.setText("Load save file");
-		createAndSave.setVisible(false);
+		save.setVisible(false);
 		load.setVisible(true);
 		returnToGameView.setVisible(false);
 		returnToMainView.setVisible(true);
@@ -98,13 +99,17 @@ public class SaveGameController {
 	}
 	
 	@FXML
-	public void handleCreateAndSave() throws URISyntaxException {
+	public void handleSave() {
 		try {
 			System.out.println(toSave.getIsGamesWon());
     		saveHandler.save(fileName.getText(), toSave);
     		saveMessage.setVisible(true);
     		fileNotFoundMessage.setVisible(false);
-    	} catch (FileNotFoundException e) {
+    	} catch (FileNotFoundException | NullPointerException e) {
+    		fileNotFoundMessage.setText("file not found");
+    		fileNotFoundMessage.setVisible(true);
+    		System.out.println("file not found");
+    	} catch (InvalidPathException e) {
     		fileNotFoundMessage.setText("invalid filename");
     		fileNotFoundMessage.setVisible(true);
     		System.out.println("invalid filename");
@@ -112,12 +117,12 @@ public class SaveGameController {
 	}
 	
 	@FXML 
-	public void handleLoad(MouseEvent event) throws IOException, URISyntaxException {
+	public void handleLoad(MouseEvent event) throws IOException {
 		try {
 			toSave=saveHandler.load(fileName.getText());
 			handleOpenGameView(event);
 			fileNotFoundMessage.setVisible(false);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException | NullPointerException e) {
 			fileNotFoundMessage.setText("file not found");
 			fileNotFoundMessage.setVisible(true);
 			System.out.println("file not found");
@@ -125,6 +130,10 @@ public class SaveGameController {
 			fileNotFoundMessage.setText("invalid file");
 			fileNotFoundMessage.setVisible(true);
 			System.out.println("invalid file");
+		} catch (InvalidPathException e) {
+			fileNotFoundMessage.setText("invalid filename");
+			fileNotFoundMessage.setVisible(true);
+			System.out.println("invalid filename");
 		}
 	}
 	
