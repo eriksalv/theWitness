@@ -75,3 +75,7 @@ SaveHandler gir støtte for å lagre et GameCollection-objekt til en fil, og las
 ### LevelEnumerator.java
 
 LevelEnumerator er en enum som har ansvar for å laste inn nivåer til newGame() metoden i GameCollection. Den gjør dette ved å laste inn filer i /resources/config-mappa. Metoden startingTiles() gir ut et Game-objekt basert på informasjonen i filen som lastes inn. startingTiles() er en implementert metode fra LevelSettings-grensesnittet. Foreløpig er LevelEnumerator.java den eneste klassen som implementerer dette grensesnittet, men det kan muligens være kjekt å ha andre klasser som arver grensesnittet, som f.eks ikke laster inn Game-objekter gjennom filer.
+
+# GUI
+
+Grensesnittet i appen skifter mellom tre ulike "views"/faner, som er fordelt over tre FXML-filer, og tre kontrollere.
