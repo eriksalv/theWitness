@@ -25,3 +25,18 @@ Når det er prikker (dots) på et brett, må man gå igjennom alle prikkene på 
 ### Flere farger
 
 Et brett som inneholder flere farger fungerer på akkurat samme måte som et brett med kun svarte å hvite ruter. Den eneste forskjellen er at det er flere farger som må separeres.
+
+# Spill logikk
+
+Logikken i spillet er fordelt over 5 klasser: Tile.java, Grid.java, Game.java, PathChecker.java og GameCollection.java
+
+### Tile.java
+
+Denne klassen er den mest grunnleggende, og beskriver hver individuelle rute/tile i et brett/game. Feltene som beskriver tilstanden til en rute er:
+
+- Hva slags type ruten er (char type). Enkelte ruter skal ha kollisjon, som er gitt ved hasCollision()-metoden.
+- x- og y-koordinatene til ruten (int x,y).
+- Om ruten inneholder en prikk eller ikke (boolean containsDot).
+
+
+
