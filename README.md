@@ -79,3 +79,15 @@ LevelEnumerator er en enum som har ansvar for å laste inn nivåer til newGame()
 # GUI
 
 Grensesnittet i appen skifter mellom tre ulike "views"/faner, som er fordelt over tre FXML-filer, og tre kontrollere.
+
+### Main.fxml
+
+Dette er hovedmenyen til spillet, som vises når man starter appen.
+
+### Game.fxml
+
+Grensesnittet til selve spillet.
+
+### SaveGame.fxml
+
+Grensesnitt for lagring til fil, og lasting fra fil.
