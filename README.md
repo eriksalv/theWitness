@@ -70,7 +70,7 @@ Grensesnittet ISaveHandler implementeres av to klasser, SaveHandler.java og Leve
 
 ### SaveHandler.java
 
-SaveHandler gir støtte for å lagre et GameCollection-objekt til en fil, og laste filen til et GameCollection-objekt. save-filene lagres i resources-mappen. En konsekvens av dette er at det ikke bør være mulig å lagre nye save-filer utover de som ligger i mappen fra før. SaveHandler inneholder også en metode **getFilePathFromResource(String filename)** som hovedsakelig brukes av andre klasser til å finne filstien til en gitt mappe i resources-mappen. Det er også en ubrukt metode i klassen, **getSaveFiles()**, som gir ut en liste av alle save-filene. Meningen bak metoden var å bruke den til å få de ulike filnavnene som knapper i grensesnittet, slik at man ikke trenger å skrive filnavnet inn for å lagre/laste, men jeg rakk ikke å implementere dette. 
+SaveHandler gir støtte for å lagre et GameCollection-objekt til en fil, og laste filen til et GameCollection-objekt. Save-filene lagres i resources-mappen. En konsekvens av dette er at det ikke bør være mulig å lagre nye save-filer utover de som ligger i mappen fra før. **Merk også at save-filene blir "resatt" dersom man trykker Maven -> Update project**. SaveHandler inneholder også en metode **getFilePathFromResource(String filename)** som hovedsakelig brukes av andre klasser til å finne filstien til en gitt mappe i resources-mappen. Det er også en ubrukt metode i klassen, **getSaveFiles()**, som gir ut en liste av alle save-filene. Meningen bak metoden var å bruke den til å få de ulike filnavnene som knapper i grensesnittet, slik at man ikke trenger å skrive filnavnet inn for å lagre/laste, men jeg rakk ikke å implementere dette. 
 
 ### LevelEnumerator.java
 
