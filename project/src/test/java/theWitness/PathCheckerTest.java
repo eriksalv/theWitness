@@ -86,7 +86,6 @@ private Game game;
 	}
 	@Test
 	public void testCheckPath() {
-		assertFalse(PathChecker.checkPath(game));
 		game.moveRight();
 		game.moveRight();
 		game.moveUp();
