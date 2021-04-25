@@ -82,12 +82,12 @@ Grensesnittet i appen skifter mellom tre ulike "views"/faner, som er fordelt ove
 
 ### Main.fxml
 
-Dette er hovedmenyen til spillet, som vises når man starter appen.
+Dette er hovedmenyen til spillet, som vises når man starter appen. Inneholder tre knapper: en for å starte et nytt spill, en for å fortsette på det forrige spillet man starta, og en for å laste inn et spill fra fil.
 
 ### Game.fxml
 
-Grensesnittet til selve spillet.
+Grensesnittet til selve spillet. Har knapper for å bevege seg i fire retninger, to knapper for å gå til forrige eller neste nivå, en knapp for å returnere til menyen, en knapp for å gå til lagring av spill, en knapp for å resette nivået man er på dersom man har gjort noe feil, og en knapp for å slette nivået man er på.
 
 ### SaveGame.fxml
 
-Grensesnitt for lagring til fil, og lasting fra fil.
+Grensesnitt for lagring til fil, og lasting fra fil. Har to tilstander avhengig av om man skal lagre eller laste. 
