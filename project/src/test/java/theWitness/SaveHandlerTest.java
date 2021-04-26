@@ -78,14 +78,14 @@ public class SaveHandlerTest {
 		byte[] testFile = null, newFile = null;
 		
 		try {
-			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave").replace("/C:", "")));
-			// ":" i "/C:" skaper problemer for nio path
+			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave").substring(3)));
+			// ":" i "/C:" eller "/D:" skaper problemer for nio path
 		} catch (IOException e) {
 			fail("Could not load test file");
 		}
 
 		try {
-			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew").replace("/C:", "")));
+			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew").substring(3)));
 		} catch (IOException e) {
 			fail("Could not load saved file");
 		}
