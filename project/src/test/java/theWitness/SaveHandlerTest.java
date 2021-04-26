@@ -78,14 +78,16 @@ public class SaveHandlerTest {
 		byte[] testFile = null, newFile = null;
 		
 		try {
-			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave").substring(3)));
+			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave")
+					.substring(saveHandler.getFilePath("testsave").lastIndexOf(":")+1)));
 			// ":" i "/C:" eller "/D:" skaper problemer for nio path
 		} catch (IOException e) {
 			fail("Could not load test file");
 		}
 
 		try {
-			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew").substring(3)));
+			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew")
+					.substring(saveHandler.getFilePath("testsave").lastIndexOf(":")+1)));
 		} catch (IOException e) {
 			fail("Could not load saved file");
 		}
