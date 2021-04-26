@@ -3,8 +3,6 @@ package theWitness;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Scanner;
 

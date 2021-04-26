@@ -2,13 +2,9 @@ package theWitness;
 
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -18,7 +14,7 @@ public class GameCollection {
 	private Map<Integer,Boolean> isGamesWon;
 	private int levelCount = 1; //OBS: levelCount starter på 1.
 	
-	public GameCollection(String s, Game... games) { //tar inn et navn på collection og varargs for games i collection
+	public GameCollection(String name, Game... games) { //tar inn et navn på collection og varargs for games i collection
 		this.games=new TreeMap<Integer,Game>(); //TreeMap for å bevare rekkefølge
 		this.isGamesWon=new TreeMap<Integer,Boolean>();
 		Stream.of(games).forEach(game -> {
