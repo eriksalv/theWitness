@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,16 +75,14 @@ public class SaveHandlerTest {
 		byte[] testFile = null, newFile = null;
 		
 		try {
-			testFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsave")
-					.substring(saveHandler.getFilePath("testsave").lastIndexOf(":")+1)));
-			// ":" i "/C:" eller "/D:" skaper problemer for nio path
+			testFile = Files.readAllBytes(Paths.get(saveHandler.getFilePath("testsave").substring(1)));
+			// den første "/" i filstien skaper problemer for nio path
 		} catch (IOException e) {
 			fail("Could not load test file");
 		}
 
 		try {
-			newFile = Files.readAllBytes(Path.of(saveHandler.getFilePath("testsavenew")
-					.substring(saveHandler.getFilePath("testsave").lastIndexOf(":")+1)));
+			newFile = Files.readAllBytes(Paths.get(saveHandler.getFilePath("testsavenew").substring(1)));
 		} catch (IOException e) {
 			fail("Could not load saved file");
 		}
