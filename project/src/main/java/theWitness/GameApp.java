@@ -17,25 +17,25 @@ import javafx.stage.Stage;
 public class GameApp extends Application {
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {		        
+	public void start(Stage primaryStage) throws Exception {
 		Parent parent = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
 		primaryStage.setTitle("The Witness");
-		
+
 		primaryStage.getIcons().add(new Image("file:" + getFileFromResource("images/icon.jpg").getAbsolutePath()));
 		Scene scene = new Scene(parent);
-		//scene.getStylesheets().add(getClass().getResource("GameStyle.css").toExternalForm());
+		// scene.getStylesheets().add(getClass().getResource("GameStyle.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-	
-	private File getFileFromResource(String fileName) throws URISyntaxException { //henter filer fra src/main/resources
+
+	private File getFileFromResource(String fileName) throws URISyntaxException { // henter filer fra src/main/resources
 		ClassLoader classLoader = getClass().getClassLoader();
-	    URL resource = classLoader.getResource(fileName);
-	    if (resource == null) {
-	        throw new IllegalArgumentException("file not found! " + fileName);
-	    } else {
-	    	return new File(resource.toURI());
-	    }
+		URL resource = classLoader.getResource(fileName);
+		if (resource == null) {
+			throw new IllegalArgumentException("file not found! " + fileName);
+		} else {
+			return new File(resource.toURI());
+		}
 
 	}
 

@@ -12,40 +12,44 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class SaveHandler implements ISaveHandler {
-	
-	//public final static String SAVE_FOLDER = "src/main/resources/saves/";
+
+	// public final static String SAVE_FOLDER = "src/main/resources/saves/";
 	public final static String SAVE_FOLDER = "saves/";
-	
-	protected Path getFilePathFromResource() throws URISyntaxException { //henter filer fra src/main/resources
+
+	protected Path getFilePathFromResource() throws URISyntaxException { // henter filer fra src/main/resources
 		return getFilePathFromResource(SAVE_FOLDER);
 
 	}
+
 	protected Path getFilePathFromResource(String filename) throws URISyntaxException {
 		ClassLoader classLoader = getClass().getClassLoader();
-	    URL resource = classLoader.getResource(filename);
-	    if (resource == null) {
-	        throw new IllegalArgumentException("file not found! " + filename);
-	    } else {
-          return (new File(resource.toURI())).toPath();
-	    }
+		URL resource = classLoader.getResource(filename);
+		if (resource == null) {
+			throw new IllegalArgumentException("file not found! " + filename);
+		} else {
+			return (new File(resource.toURI())).toPath();
+		}
 	}
-	//Ikke brukt
+
+	// Ikke brukt
 	public static final String[] getSaveFiles() throws URISyntaxException {
 		File toList = (new SaveHandler()).getFilePathFromResource().toFile();
-		FilenameFilter filter = new FilenameFilter() { //filtrerer bort alle filer som ikke ender med .txt
-	        @Override
-	        public boolean accept(File f, String name) {
-	            return name.endsWith(".txt");
-	        }
-	    };
+		FilenameFilter filter = new FilenameFilter() { // filtrerer bort alle filer som ikke ender med .txt
+			@Override
+			public boolean accept(File f, String name) {
+				return name.endsWith(".txt");
+			}
+		};
 		return toList.list(filter);
-	}	
+	}
+
 	public void save(String filename, GameCollection games) throws FileNotFoundException {
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(getFilePath(filename)))) {
-			//new FileOutputStream(getClass().getResource("/" + SAVE_FOLDER + filename + ".txt").getPath()))
-			//getFilePath(filename)
+			// new FileOutputStream(getClass().getResource("/" + SAVE_FOLDER + filename +
+			// ".txt").getPath()))
+			// getFilePath(filename)
 			games.getGames().keySet().forEach(level -> {
-				Game game = games.getGames().getOrDefault(level, null); //finner hvilket game som hører til hver level
+				Game game = games.getGames().getOrDefault(level, null); // finner hvilket game som hører til hver level
 				writer.println(game.getWidth());
 				writer.println(game.getHeight());
 				game.forEach(tile -> {
@@ -65,7 +69,7 @@ public class SaveHandler implements ISaveHandler {
 		}
 
 	}
-	
+
 	public GameCollection load(String filename) throws FileNotFoundException {
 		try (Scanner scanner = new Scanner(new File(getFilePath(filename)))) {
 			GameCollection games = new GameCollection(filename);
@@ -73,29 +77,30 @@ public class SaveHandler implements ISaveHandler {
 				int width = scanner.nextInt();
 				int height = scanner.nextInt();
 				Game game = new Game(width, height);
-				
+
 				scanner.nextLine();
-				
+
 				String board = scanner.next();
 				for (int y = 0; y < height; y++) {
 					for (int x = 0; x < width; x++) {
 						char symbol = board.charAt(y * width + x);
-						if (!Character.toString(symbol).matches("[-|=0]")) { //trenger ikke å sette symbol på "autogenererte" tiles
-							if (symbol=='.' ) {
+						if (!Character.toString(symbol).matches("[-|=0]")) { // trenger ikke å sette symbol på
+																				// "autogenererte" tiles
+							if (symbol == '.') {
 								game.getTile(x, y).setDot();
 							} else {
-								game.getTile(x, y).setType(symbol); 
+								game.getTile(x, y).setType(symbol);
 							}
 						}
 					}
 				}
 				scanner.nextLine();
-				
+
 				game.setGameStart(scanner.nextInt(), scanner.nextInt());
-				game.setGameGoal(scanner.nextInt(),scanner.nextInt());
-				
+				game.setGameGoal(scanner.nextInt(), scanner.nextInt());
+
 				scanner.nextLine();
-				
+
 				games.addGame(game, scanner.nextBoolean());
 			}
 			return games;
@@ -106,18 +111,19 @@ public class SaveHandler implements ISaveHandler {
 	public String getFilePath(String filename) throws FileNotFoundException {
 		return getClass().getResource("/" + SAVE_FOLDER + filename + ".txt").getPath();
 	}
-	
+
 	public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
-//		GameCollection gc = new GameCollection("nice",new Game(5,5), new Game(10,10), new Game(4,4));
-//		System.out.println(gc.getGames());
-//		System.out.println(gc.getIsGamesWon());
-//		SaveHandler sh = new SaveHandler();
-//		sh.save("test",gc);
-//		System.out.println(sh.getSaveFiles());
+		// GameCollection gc = new GameCollection("nice",new Game(5,5), new Game(10,10),
+		// new Game(4,4));
+		// System.out.println(gc.getGames());
+		// System.out.println(gc.getIsGamesWon());
+		// SaveHandler sh = new SaveHandler();
+		// sh.save("test",gc);
+		// System.out.println(sh.getSaveFiles());
 		System.out.println(Arrays.asList(getSaveFiles()));
-//		SaveHandler s = new SaveHandler();
-//		System.out.println(s.load("save_1").getIsGamesWon());
-//		System.out.println(s.load("save_1").getGames());
+		// SaveHandler s = new SaveHandler();
+		// System.out.println(s.load("save_1").getIsGamesWon());
+		// System.out.println(s.load("save_1").getGames());
 	}
 
 }

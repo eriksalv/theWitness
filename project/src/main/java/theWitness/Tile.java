@@ -1,89 +1,86 @@
 package theWitness;
 
 public class Tile {
-	private char type = '_';
+    private char type = '_';
     private int x;
     private int y;
     private boolean containsDot;
 
     public Tile(int x, int y) {
-    	if (x<0 || y<0) {
-    		throw new IllegalArgumentException("coordinates must be non-negative");
-    	}
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("coordinates must be non-negative");
+        }
         this.x = x;
         this.y = y;
     }
-    
+
     public void setType(char symbol) {
-    	if ("|-=0<>S@_.PC".indexOf(symbol) == -1) { //Dersom symbolet er en ugyldig type, kastes IllegalArgument
-    		throw new IllegalArgumentException("Not a valid tile-type");
-    	}
-    	else if (symbol=='.') {
-    		containsDot=true;
-    	}
-    	else {
-    		type=symbol;
-    	}		
-	}
+        if ("|-=0<>S@_.PC".indexOf(symbol) == -1) { // Dersom symbolet er en ugyldig type, kastes IllegalArgument
+            throw new IllegalArgumentException("Not a valid tile-type");
+        } else if (symbol == '.') {
+            containsDot = true;
+        } else {
+            type = symbol;
+        }
+    }
 
     public void setLine() {
-    	if (x%2==0) {
-    		type = '|';
-    	}
-    	else {
-    		type = '-';
-    	}
+        if (x % 2 == 0) {
+            type = '|';
+        } else {
+            type = '-';
+        }
     }
-    
+
     public void setDot() {
-    	if (hasCollision()) {
-    		throw new IllegalArgumentException("Cannot put a dot on a tile with collision");
-    	}
-    	containsDot=true;
+        if (hasCollision()) {
+            throw new IllegalArgumentException("Cannot put a dot on a tile with collision");
+        }
+        containsDot = true;
     }
-    
+
     public void removeDot() {
-    	containsDot=false;
+        containsDot = false;
     }
-    
+
     public boolean getContainsDot() {
-    	return containsDot;
+        return containsDot;
     }
-    
+
     public boolean getIsColored() {
-    	return isWhite() || isBlack() || isPink() || isCyan();
+        return isWhite() || isBlack() || isPink() || isCyan();
     }
-    
+
     public char getType() {
-    	return type;
+        return type;
     }
 
     public void setMovedLine() {
         type = '=';
     }
-    
+
     public void setLastMovedLine() {
-    	type = '0';
+        type = '0';
     }
-    
+
     public void setWhite() {
-    	type = '<';
+        type = '<';
     }
-    
+
     public void setBlack() {
-    	type = '>';
+        type = '>';
     }
-    
+
     public void setPink() {
-    	type='P';
+        type = 'P';
     }
-    
+
     public void setCyan() {
-    	type='C';
+        type = 'C';
     }
-    
+
     public void setBlank() {
-    	type = '_';
+        type = '_';
     }
 
     public void setStart() {
@@ -101,37 +98,37 @@ public class Tile {
     public boolean isMovedLine() {
         return type == '=';
     }
-    
+
     public boolean isLastMovedLine() {
-    	return type == '0';
+        return type == '0';
     }
 
     public boolean isBlock() {
         return type == '#';
     }
-    
+
     public boolean isWhite() {
-    	return type == '<';
+        return type == '<';
     }
-    
+
     public boolean isBlack() {
-    	return type == '>';
+        return type == '>';
     }
-    
+
     public boolean isPink() {
-    	return type=='P';
+        return type == 'P';
     }
-    
+
     public boolean isCyan() {
-    	return type=='C';
+        return type == 'C';
     }
 
     public boolean isBlank() {
         return type == '_';
     }
-    
+
     public boolean isStart() {
-    	return type == 'S';
+        return type == 'S';
     }
 
     public boolean isGoal() {
@@ -152,15 +149,15 @@ public class Tile {
 
     @Override
     public String toString() {
-    	if (getContainsDot()) {
-    		return ".";
-    	}
+        if (getContainsDot()) {
+            return ".";
+        }
         return Character.toString(type);
     }
-    
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+
+    }
 
 }
